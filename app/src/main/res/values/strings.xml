@@ -30,5 +30,8 @@
     <string name="log">log</string>
     <string name="percentage">%</string>
     <string name="root">√￣</string>
+    <string name="AC">AC</string>
+    <string name="DEL">DEL</string>
+    <string name="nega">+/-</string>
 
 </resources>

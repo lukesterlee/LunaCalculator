@@ -17,6 +17,8 @@ public class MainActivity extends Activity {
     private String operation;
     private ButtonClickListener btnClick;
 
+    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,8 +28,8 @@ public class MainActivity extends Activity {
 
         int idList[]= {R.id.button0,R.id.button1,R.id.button2,R.id.button3,R.id.button4,
                 R.id.button5,R.id.button6,R.id.button7,R.id.button8,R.id.button9,
-                R.id.buttonC,R.id.buttonDivide,R.id.buttonDot,R.id.buttonEqual,
-                R.id.buttonMinus,R.id.buttonPlus,R.id.buttonMultiply,};
+                R.id.buttonAC,R.id.buttonDivided,R.id.buttonDot,R.id.buttonEqual,
+                R.id.buttonMinus,R.id.buttonAdd,R.id.,};
         for (int id:idList){
             View v = (View) findViewById(id);
 
