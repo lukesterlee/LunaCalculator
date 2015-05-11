@@ -1,5 +1,14 @@
 # LunaCalculator
 
+#### Specification
+
+Basic calculator (Vertical)
+
+1. 
+ 
+Scientific calculator (Horizental) 
+
+
 #### Check points
 
 0. Set up the working environment (completed)
