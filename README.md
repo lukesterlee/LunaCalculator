@@ -4,6 +4,10 @@
 
 May 5th, 2015 ~ May 21st, 2015 (16 days)
 
+#### Members
+
+Luke Lee, Anna Li
+
 #### Specification
 
 Basic calculator (Vertical)
@@ -18,6 +22,10 @@ Scientific calculator (Horizental)
 Additional Features
 
 1. 
+
+#### Log
+
+May 11th : EvalEx library applied, error prevention (double operation)
 
 
 #### Check points
