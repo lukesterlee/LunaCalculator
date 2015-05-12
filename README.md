@@ -1,4 +1,8 @@
-# LunaCalculator
+# Luna Calculator
+
+#### Project Date
+
+May 5th, 2015 ~ May 21st, 2015 (16 days)
 
 #### Specification
 
