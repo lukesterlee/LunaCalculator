@@ -17,7 +17,9 @@ Basic calculator (Vertical)
  
 Scientific calculator (Horizental) 
 
-1. 
+1. sin, cos, tan
+2. log, ln
+3. ^
 
 Additional Features
 
