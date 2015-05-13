@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ScientificCalculator</string>
+    <string name="app_name">Luna Calculator</string>
 
     <!--what is this for? defult?-->
     <string name="action_settings">Settings</string>
