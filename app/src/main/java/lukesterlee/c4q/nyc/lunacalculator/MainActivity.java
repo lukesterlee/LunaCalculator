@@ -22,8 +22,8 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
+        setContentView(R.layout.activity_main);
         panel = (TextView) findViewById(R.id.panel);
 
         buttons = new ArrayList<Button>();
@@ -47,6 +47,7 @@ public class MainActivity extends Activity {
         buttons.add((Button) findViewById(R.id.buttonDivided));
 
         ButtonClickListener listener = new ButtonClickListener(panel);
+
         for (Button button : buttons) {
             button.setOnClickListener(listener);
         }
@@ -60,9 +61,11 @@ public class MainActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
 
 
 
@@ -80,5 +83,11 @@ public class MainActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+    }
+
 
 }
