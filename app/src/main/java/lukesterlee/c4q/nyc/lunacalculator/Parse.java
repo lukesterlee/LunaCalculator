@@ -13,11 +13,11 @@ public class Parse {
         BigDecimal parse;
         try {
             parse = expression.eval();
-            result = parse.toString();
+            result = parse.toPlainString();
         } catch(Exception e) {
             result = "syntax error";
         }
-        return result.toString();
+        return result;
     }
 
     public static boolean isNumber(String input) {
@@ -28,9 +28,17 @@ public class Parse {
     }
 
     public static String addOperation(String input, String operation) {
+        if (input.length() == 0) {
+            return input;
+        }
         if(!isNumber(input))
             input = input.substring(0, input.length()-1);
         input += operation;
         return input;
+    }
+
+    public static String addNegative(String input) {
+
+        return "";
     }
 }

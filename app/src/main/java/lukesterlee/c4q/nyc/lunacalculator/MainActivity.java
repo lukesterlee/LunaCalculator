@@ -19,6 +19,7 @@ public class MainActivity extends Activity {
     ArrayList<Button> buttons;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,11 +46,18 @@ public class MainActivity extends Activity {
         buttons.add((Button) findViewById(R.id.buttonMultiple));
         buttons.add((Button) findViewById(R.id.buttonEqual));
         buttons.add((Button) findViewById(R.id.buttonDivided));
+        buttons.add((Button) findViewById(R.id.buttonSin));
+        buttons.add((Button) findViewById(R.id.buttonCos));
+        buttons.add((Button) findViewById(R.id.buttonTan));
+        buttons.add((Button) findViewById(R.id.buttonParenthesis));
 
         ButtonClickListener listener = new ButtonClickListener(panel);
 
         for (Button button : buttons) {
-            button.setOnClickListener(listener);
+            if (button != null) {
+                button.setOnClickListener(listener);
+            }
+
         }
 
 
@@ -84,10 +92,7 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onTrimMemory(int level) {
-        super.onTrimMemory(level);
-    }
+
 
 
 }
