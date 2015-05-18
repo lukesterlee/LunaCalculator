@@ -13,13 +13,13 @@ Luke Lee, Anna Li
 Basic calculator (Vertical)
 
 1. +, -, *, /
-2. AC, DEL, (), ANS, (-)
+2. AC, DEL, (), ANS, ^
  
 Scientific calculator (Horizental) 
 
 1. sin, cos, tan
 2. log, ln
-3. ^
+3. 
 
 Additional Features
 
@@ -52,4 +52,31 @@ Step 1.5 : now you see the duplicate codes. find a better way to handle this and
 4. error handling
 5. adding bonus features
 6. user testing
+7. 
+
+####
+error handling
+
+multiple operators prevention : 3++
+
+auto closing : sin(30
+
+#### Things to do
+
+saving history
+
+radian/degree
+
+%
+
+factorial 0.45!
+
+() complete
+
+negative
+
+optimize coding
+
+
+
 
