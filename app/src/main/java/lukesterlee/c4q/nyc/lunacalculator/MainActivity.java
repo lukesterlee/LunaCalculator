@@ -27,6 +27,10 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         panel = (TextView) findViewById(R.id.panel);
 
+        Button sin = (Button) findViewById(R.id.buttonSin);
+        Button cos = (Button) findViewById(R.id.buttonCos);
+        Button tan = (Button) findViewById(R.id.buttonTan);
+
         buttons = new ArrayList<Button>();
         buttons.add((Button) findViewById(R.id.button0));
         buttons.add((Button) findViewById(R.id.button1));
@@ -46,12 +50,22 @@ public class MainActivity extends Activity {
         buttons.add((Button) findViewById(R.id.buttonMultiple));
         buttons.add((Button) findViewById(R.id.buttonEqual));
         buttons.add((Button) findViewById(R.id.buttonDivided));
-        buttons.add((Button) findViewById(R.id.buttonSin));
-        buttons.add((Button) findViewById(R.id.buttonCos));
-        buttons.add((Button) findViewById(R.id.buttonTan));
+        buttons.add(sin);
+        buttons.add(cos);
+        buttons.add(tan);
         buttons.add((Button) findViewById(R.id.buttonParenthesis));
+        buttons.add((Button) findViewById(R.id.buttonE));
+        buttons.add((Button) findViewById(R.id.buttonPi));
+        buttons.add((Button) findViewById(R.id.buttonRoot));
+        buttons.add((Button) findViewById(R.id.buttonFactorial));
+        buttons.add((Button) findViewById(R.id.buttonLn));
+        buttons.add((Button) findViewById(R.id.buttonLog));
+        buttons.add((Button) findViewById(R.id.buttonAns));
+        buttons.add((Button) findViewById(R.id.buttonExp));
+        buttons.add((Button) findViewById(R.id.button2nd));
+        buttons.add((Button) findViewById(R.id.buttonNega));
 
-        ButtonClickListener listener = new ButtonClickListener(panel);
+        ButtonClickListener listener = new ButtonClickListener(panel, sin, cos, tan);
 
         for (Button button : buttons) {
             if (button != null) {

@@ -198,7 +198,7 @@ import java.util.Stack;
 public class Expression {
 
 
-	public static final BigDecimal e = new BigDecimal("2.718281828");
+	public static final BigDecimal E = new BigDecimal("2.71828182845904523536028747135266249775724709369995");
 
 	/**
 	 * Definition of PI as a constant, can be used in expressions as variable.
@@ -815,6 +815,7 @@ public class Expression {
 		variables.put("PI", PI);
 		variables.put("TRUE", BigDecimal.ONE);
 		variables.put("FALSE", BigDecimal.ZERO);
+		variables.put("e", E);
 
 	}
 

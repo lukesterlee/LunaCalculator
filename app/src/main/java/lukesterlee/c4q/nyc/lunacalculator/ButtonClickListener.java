@@ -1,5 +1,6 @@
 package lukesterlee.c4q.nyc.lunacalculator;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,32 +16,42 @@ public class ButtonClickListener implements View.OnClickListener {
 
     TextView panel;
 
+    String print;
     String ans;
 
     int lastCode;
     int open;
     int close;
 
-    boolean isSinOpened;
+    boolean is2ndOn;
     boolean isRadian;
+
+    Button sin;
+    Button cos;
+    Button tan;
 
     Stack<String> input;
     Stack<String> display;
     Stack<String> history;
 
-    public ButtonClickListener(TextView panel) {
+    public ButtonClickListener(TextView panel, Button sin, Button cos, Button tan) {
         input = new Stack<String>();
         display = new Stack<String>();
         history = new Stack<String>();
 
+        this.sin = sin;
+        this.cos = cos;
+        this.tan = tan;
+
         this.panel = panel;
-        ans = "";
+        print = "";
+        ans = "0";
         lastCode = 0;
         open = 0;
         close = 0;
 
+        is2ndOn = false;
         isRadian = false;
-        isSinOpened = false;
     }
 
     @Override
@@ -103,7 +114,7 @@ public class ButtonClickListener implements View.OnClickListener {
 
 
             case R.id.buttonNega :
-
+                handleNegative();
                 break;
             case R.id.buttonParenthesis :
                 handleParenthesis();
@@ -122,33 +133,60 @@ public class ButtonClickListener implements View.OnClickListener {
 
 
             case R.id.buttonSin :
-                handleFunction("sin(", "sin(");
+                if (is2ndOn) {
+                    handleFunction("asin(", "asin(", true);
+                } else {
+                    handleFunction("sin(", "sin(", true);
+                }
                 break;
             case R.id.buttonCos :
-                handleFunction("cos(", "cos(");
+                if (is2ndOn) {
+                    handleFunction("acos(", "acos(", true);
+                } else {
+                    handleFunction("cos(", "cos(", true);
+                }
                 break;
             case R.id.buttonTan :
-                handleFunction("tan(", "tan(");
+                if (is2ndOn) {
+                    handleFunction("atan(", "atan(", true);
+                } else {
+                    handleFunction("tan(", "tan(", true);
+                }
                 break;
             case R.id.buttonLn :
-                handleFunction("log(", "ln(");
+                handleFunction("log(", "ln(", true);
                 break;
             case R.id.buttonLog :
-                handleFunction("log10(", "Log(");
+                handleFunction("log10(", "Log(", true);
                 break;
             case R.id.buttonRoot :
-                handleFunction("sqrt(", "√(");
+                handleFunction("sqrt(", "√(", true);
                 break;
             case R.id.buttonPi :
-                handleFunction("PI", "π");
+                handleFunction("PI", "π", false);
                 break;
             case R.id.buttonE :
-                handleFunction("e", "e");
+                handleFunction("e", "e", false);
                 break;
 
 
 
+            case R.id.button2nd :
+                if (is2ndOn) {
+                    is2ndOn = false;
+                    sin.setText("sin");
+                    cos.setText("cos");
+                    tan.setText("tan");
+                } else {
+                    is2ndOn = true;
+                    sin.setText("asin");
+                    cos.setText("acos");
+                    tan.setText("atan");
+                }
+
+                break;
             case R.id.buttonAns :
+                handleAns();
                 break;
 
 
@@ -166,12 +204,19 @@ public class ButtonClickListener implements View.OnClickListener {
 
         }
 
+
+
+        print = stackToString(display);
+        panel.setText(print);
+    }
+
+    public String stackToString(Stack<String> stack) {
         String print = "";
-        Object[] objects = display.toArray();
+        Object[] objects = stack.toArray();
         for (Object object : objects) {
             print += object.toString();
         }
-        panel.setText(print);
+        return print;
     }
 
     /*
@@ -187,12 +232,11 @@ public class ButtonClickListener implements View.OnClickListener {
      */
     public int lastDetection() {
 
-        if (input.empty()) {
+        if (display.empty()) {
             return 0;
         }
 
         String last = display.peek();
-
         if (Character.isDigit(last.charAt(0))) {
             return 1;
         } else if (last.equals(".")) {
@@ -211,11 +255,11 @@ public class ButtonClickListener implements View.OnClickListener {
             return 7;
         } else if (last.equals("^")) {
             return 8;
+        } else if (last.equals("syntax error")) {
+            display.clear();
+            return 0;
         }
-
-
-        else
-            return -1;
+        return -1;
     }
 
 
@@ -232,10 +276,16 @@ public class ButtonClickListener implements View.OnClickListener {
 
             // 0~9
             case 1 :
-                String newNumber = input.pop() + number;
-                input.push(newNumber);
-                display.pop();
-                display.push(newNumber);
+                if (!input.empty()) {
+                    String newNumber = input.pop() + number;
+                    input.push(newNumber);
+                    display.pop();
+                    display.push(newNumber);
+                } else {
+                    input.push(number);
+                    display.clear();
+                    display.push(number);
+                }
                 break;
 
             // .
@@ -295,10 +345,17 @@ public class ButtonClickListener implements View.OnClickListener {
 
             // empty
             case 0 :
+                input.push(ans);
+                display.push("Ans");
+                input.push(operator);
+                display.push(operator);
                 break;
 
             // 0~9
             case 1 :
+                if (input.empty()) {
+                    input.push(display.peek());
+                }
                 input.push(operator);
                 display.push(operator);
                 break;
@@ -346,6 +403,8 @@ public class ButtonClickListener implements View.OnClickListener {
 
     public void handleAC() {
         input.clear();
+        display.clear();
+        print = "";
         open = 0;
         close = 0;
     }
@@ -361,11 +420,16 @@ public class ButtonClickListener implements View.OnClickListener {
 
             // 0~9
             case 1 :
+                if (input.empty()) {
+                    input.push(display.peek());
+                }
                 String delNumber = input.pop();
                 display.pop();
-                delNumber = delNumber.substring(0, delNumber.length()-1);
-                input.push(delNumber);
-                display.push(delNumber);
+                if(delNumber.length() != 1) {
+                    delNumber = delNumber.substring(0, delNumber.length()-1);
+                    input.push(delNumber);
+                    display.push(delNumber);
+                }
                 break;
 
             // .
@@ -430,8 +494,17 @@ public class ButtonClickListener implements View.OnClickListener {
 
             // 0~9
             case 1 :
-                input.push(".");
-                display.push(".");
+                if (input.empty()) {
+                    display.pop();
+                    input.push("0");
+                    input.push(".");
+                    display.push("0");
+                    display.push(".");
+                } else {
+                    input.push(".");
+                    display.push(".");
+                }
+
                 break;
 
             // .
@@ -494,7 +567,7 @@ public class ButtonClickListener implements View.OnClickListener {
 
     }
 
-    public void handleFunction(String symbol, String symbolDisplay) {
+    public void handleFunction(String symbol, String symbolDisplay, boolean isParenthesis) {
 
         lastCode = lastDetection();
         switch (lastCode) {
@@ -503,14 +576,21 @@ public class ButtonClickListener implements View.OnClickListener {
             case 0 :
                 input.push(symbol);
                 display.push(symbolDisplay);
+                if (isParenthesis)
+                    open++;
                 break;
 
             // 0~9
             case 1 :
+                if (input.empty()) {
+                    input.push(display.peek());
+                }
                 input.push("*");
                 input.push(symbol);
                 display.push("*");
                 display.push(symbolDisplay);
+                if (isParenthesis)
+                    open++;
                 break;
 
             // .
@@ -521,18 +601,24 @@ public class ButtonClickListener implements View.OnClickListener {
             case 3 :
                 input.push(symbol);
                 display.push(symbolDisplay);
+                if (isParenthesis)
+                    open++;
                 break;
 
             // sin( , cos( , tan(
             case 4 :
                 input.push(symbol);
-                display.push(symbolDisplay;
+                display.push(symbolDisplay);
+                if (isParenthesis)
+                    open++;
                 break;
 
             // ln( , log( , (
             case 5 :
                 input.push(symbol);
                 display.push(symbolDisplay);
+                if (isParenthesis)
+                    open++;
                 break;
 
             // )
@@ -541,6 +627,8 @@ public class ButtonClickListener implements View.OnClickListener {
                 input.push(symbol);
                 display.push("*");
                 display.push(symbolDisplay);
+                if (isParenthesis)
+                    open++;
                 break;
 
             // e, pi, !, %
@@ -549,12 +637,16 @@ public class ButtonClickListener implements View.OnClickListener {
                 input.push(symbol);
                 display.push("*");
                 display.push(symbolDisplay);
+                if (isParenthesis)
+                    open++;
                 break;
 
             // ^
             case 8 :
                 input.push(symbol);
                 display.push(symbolDisplay);
+                if (isParenthesis)
+                    open++;
                 break;
 
         }
@@ -623,9 +715,17 @@ public class ButtonClickListener implements View.OnClickListener {
 
             // 0~9
             case 1 :
-                input.push(")");
-                display.push(")");
-                close++;
+                if (input.empty()) {
+                    display.clear();
+                    input.push("(");
+                    display.push("(");
+                    open++;
+                } else {
+                    input.push(")");
+                    display.push(")");
+                    close++;
+                }
+
                 break;
 
             // .
@@ -670,8 +770,9 @@ public class ButtonClickListener implements View.OnClickListener {
 
             // e, pi, !, %
             case 7 :
-                input.push("^");
-                display.push("^");
+                input.push(")");
+                display.push(")");
+                close--;
                 break;
 
             // ^
@@ -700,39 +801,55 @@ public class ButtonClickListener implements View.OnClickListener {
 
             // 0~9
             case 1 :
-                last = input.pop();
-                secondLast = input.pop();
-                thirdLast = input.pop();
-                display.pop();
-                display.pop();
-                display.pop();
-
-                if (secondLast.equals(".")) {
-                    input.push("(");
+                if (input.empty()) {
                     input.push("-");
-                    input.push(thirdLast);
-                    input.push(secondLast);
-                    input.push(last);
-                    display.push("(");
+                    input.push(display.pop());
                     display.push("-");
-                    display.push(thirdLast);
-                    display.push(secondLast);
-                    display.push(last);
-            
+                    display.push(input.peek());
                 } else {
-                    input.push(thirdLast);
-                    input.push(secondLast);
-                    input.push("(");
-                    input.push("-");
-                    input.push(last);
-                    display.push(thirdLast);
-                    display.push(secondLast);
-                    display.push("(");
-                    display.push("-");
-                    display.push(last);
+                    if (input.size() == 1) {
+                        last = input.pop();
+                        input.push("-");
+                        input.push(last);
+                        display.pop();
+                        display.push("-");
+                        display.push(last);
+                    } else {
+                        last = input.pop();
+                        secondLast = input.pop();
+                        thirdLast = input.pop();
+                        display.pop();
+                        display.pop();
+                        display.pop();
+                        if (secondLast.equals(".")) {
+                            input.push("(");
+                            input.push("-");
+                            input.push(thirdLast);
+                            input.push(secondLast);
+                            input.push(last);
+                            display.push("(");
+                            display.push("-");
+                            display.push(thirdLast);
+                            display.push(secondLast);
+                            display.push(last);
+
+                        } else {
+                            input.push(thirdLast);
+                            input.push(secondLast);
+                            input.push("(");
+                            input.push("-");
+                            input.push(last);
+                            display.push(thirdLast);
+                            display.push(secondLast);
+                            display.push("(");
+                            display.push("-");
+                            display.push(last);
+                        }
+                        open++;
+                    }
 
                 }
-                open++;
+
                 break;
 
             // .
@@ -782,8 +899,12 @@ public class ButtonClickListener implements View.OnClickListener {
 
             // e, pi, !, %
             case 7 :
-                input.push("^");
-                display.push("^");
+                input.push("*");
+                display.push("*");
+                input.push("(");
+                display.push("(");
+                input.push("-");
+                display.push("-");
                 break;
 
             // ^
@@ -794,11 +915,15 @@ public class ButtonClickListener implements View.OnClickListener {
     }
 
 
-    public String factorial(String number) {
-        BigDecimal number
+    public long factorial(long number) {
+        if (number == 1 || number == 0) {
+            return 1;
+        }
+        return factorial(number-1) * number;
     }
 
     public void handleFactorial() {
+
 
         lastCode = lastDetection();
         switch (lastCode) {
@@ -809,6 +934,17 @@ public class ButtonClickListener implements View.OnClickListener {
 
             // 0~9
             case 1 :
+                // handle the case of 0.45
+
+                if (input.empty()) {
+                    input.push(display.peek());
+                }
+                if (!input.peek().equals(".")) {
+                    String number = input.pop();
+                    display.pop();
+                    input.push(Long.toString(factorial(Long.parseLong(number))));
+                    display.push(number + "!");
+                }
 
                 break;
 
@@ -818,42 +954,92 @@ public class ButtonClickListener implements View.OnClickListener {
 
             // + - * /
             case 3 :
-                input.push(symbol);
-                display.push(symbolDisplay);
                 break;
 
             // sin( , cos( , tan(
             case 4 :
-                input.push(symbol);
-                display.push(symbolDisplay;
                 break;
 
             // ln( , log( , (
             case 5 :
-                input.push(symbol);
-                display.push(symbolDisplay);
+                break;
+
+            // )
+            case 6 :
+
+                break;
+
+            // e, pi, !, %
+            case 7 :
+                break;
+
+            // ^
+            case 8 :
+                break;
+
+        }
+    }
+
+    public void handleAns() {
+        lastCode = lastDetection();
+        switch (lastCode) {
+
+            // empty
+            case 0 :
+                input.push(ans);
+                display.push("Ans");
+                break;
+
+            // 0~9
+            case 1 :
+                input.push("*");
+                display.push("*");
+                input.push(ans);
+                display.push("Ans");
+                break;
+
+            // .
+            case 2 :
+                break;
+
+            // + - * /
+            case 3 :
+                input.push(ans);
+                display.push("Ans");
+                break;
+
+            // sin( , cos( , tan(
+            case 4 :
+                input.push(ans);
+                display.push("Ans");
+                break;
+
+            // ln( , log( , (
+            case 5 :
+                input.push(ans);
+                display.push("Ans");
                 break;
 
             // )
             case 6 :
                 input.push("*");
-                input.push(symbol);
                 display.push("*");
-                display.push(symbolDisplay);
+                input.push(ans);
+                display.push("Ans");
                 break;
 
             // e, pi, !, %
             case 7 :
                 input.push("*");
-                input.push(symbol);
                 display.push("*");
-                display.push(symbolDisplay);
+                input.push(ans);
+                display.push("Ans");
                 break;
 
             // ^
             case 8 :
-                input.push(symbol);
-                display.push(symbolDisplay);
+                input.push(ans);
+                display.push("Ans");
                 break;
 
         }
@@ -862,23 +1048,27 @@ public class ButtonClickListener implements View.OnClickListener {
     public void handleEqual() {
         // test if the user misses parenthesis.
         while (open > close) {
-            input += ")";
+            input.push(")");
             close++;
         }
 
         // if the test is passed
-        submit(input);
+
+        submit(stackToString(input));
     }
 
-    public void submit(String input) {
-        Expression expression = new Expression(input);
+    public void submit(String inputExpression) {
+        Expression expression = new Expression(inputExpression);
         try {
             BigDecimal parse = expression.eval();
             ans = parse.toPlainString();
-            display = ans;
-            input = "";
+            display.clear();
+            input.clear();
+            display.push(ans);
         } catch(Exception e) {
-            display = "syntax error";
+            input.clear();
+            display.clear();
+            display.push("syntax error");
         }
     }
 
