@@ -21,6 +21,7 @@ public class ButtonClickListener implements View.OnClickListener {
     int open;
     int close;
 
+    boolean isSinOpened;
     boolean isRadian;
 
     Stack<String> input;
@@ -39,6 +40,7 @@ public class ButtonClickListener implements View.OnClickListener {
         close = 0;
 
         isRadian = false;
+        isSinOpened = false;
     }
 
     @Override
@@ -147,7 +149,6 @@ public class ButtonClickListener implements View.OnClickListener {
 
 
             case R.id.buttonAns :
-                input += "(" + ans + ")";
                 break;
 
 
@@ -164,7 +165,13 @@ public class ButtonClickListener implements View.OnClickListener {
                 break;
 
         }
-        panel.setText(display);
+
+        String print = "";
+        Object[] objects = display.toArray();
+        for (Object object : objects) {
+            print += object.toString();
+        }
+        panel.setText(print);
     }
 
     /*
@@ -184,7 +191,7 @@ public class ButtonClickListener implements View.OnClickListener {
             return 0;
         }
 
-        String last = input.peek();
+        String last = display.peek();
 
         if (Character.isDigit(last.charAt(0))) {
             return 1;
@@ -192,7 +199,7 @@ public class ButtonClickListener implements View.OnClickListener {
             return 2;
         } else if (last.equals("+") || last.equals("-") || last.equals("*") || last.equals("/")) {
             return 3;
-        } else if (last.startsWith("sin(") || last.startsWith("cos(") || last.startsWith("tan(")) {
+        } else if (last.equals("sin(") || last.equals("cos(") || last.equals("tan(")) {
             return 4;
         }
         // ln( , log( , √( , (
@@ -634,6 +641,9 @@ public class ButtonClickListener implements View.OnClickListener {
 
             // sin( , cos( , tan(
             case 4 :
+                input.push("(");
+                display.push("(");
+                open++;
                 break;
 
             // ln( , log( , (
@@ -647,9 +657,127 @@ public class ButtonClickListener implements View.OnClickListener {
             case 6 :
                 if (open == close) {
                     input.push("*");
+                    input.push("(");
                     display.push("*");
-                    
+                    display.push("(");
+                    open++;
+                } else if (open > close) {
+                    input.push(")");
+                    display.push(")");
+                    close++;
                 }
+                break;
+
+            // e, pi, !, %
+            case 7 :
+                input.push("^");
+                display.push("^");
+                break;
+
+            // ^
+            case 8 :
+                input.push("(");
+                display.push("(");
+                open++;
+                break;
+
+        }
+    }
+
+    public void handleNegative() {
+        String last;
+        String secondLast;
+        String thirdLast;
+
+        lastCode = lastDetection();
+        switch (lastCode) {
+
+            // empty
+            case 0 :
+                input.push("-");
+                display.push("-");
+                break;
+
+            // 0~9
+            case 1 :
+                last = input.pop();
+                secondLast = input.pop();
+                thirdLast = input.pop();
+                display.pop();
+                display.pop();
+                display.pop();
+
+                if (secondLast.equals(".")) {
+                    input.push("(");
+                    input.push("-");
+                    input.push(thirdLast);
+                    input.push(secondLast);
+                    input.push(last);
+                    display.push("(");
+                    display.push("-");
+                    display.push(thirdLast);
+                    display.push(secondLast);
+                    display.push(last);
+            
+                } else {
+                    input.push(thirdLast);
+                    input.push(secondLast);
+                    input.push("(");
+                    input.push("-");
+                    input.push(last);
+                    display.push(thirdLast);
+                    display.push(secondLast);
+                    display.push("(");
+                    display.push("-");
+                    display.push(last);
+
+                }
+                open++;
+                break;
+
+            // .
+            case 2 :
+                last = input.pop();
+                secondLast = input.pop();
+                display.pop();
+                display.pop();
+                input.push("-");
+                display.push("-");
+                input.push(secondLast);
+                display.push(secondLast);
+                input.push(last);
+                display.push(last);
+                break;
+
+            // + - * /
+            case 3 :
+                input.push("(");
+                display.push("(");
+                input.push("-");
+                display.push("-");
+                open++;
+                break;
+
+            // sin( , cos( , tan(
+            case 4 :
+                input.push("-");
+                display.push("-");
+                break;
+
+            // ln( , log( , (
+            case 5 :
+                input.push("-");
+                display.push("-");
+                break;
+
+            // )
+            case 6 :
+                input.push("*");
+                display.push("*");
+                input.push("(");
+                display.push("(");
+                input.push("-");
+                display.push("-");
                 break;
 
             // e, pi, !, %
