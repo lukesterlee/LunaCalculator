@@ -65,7 +65,28 @@ auto closing : sin(30
 
 saving history
 
+saving entire history + send email
+
 radian/degree
+
+textview overlapping fixing
+
+graphing
+
+wolfram
+
+unit conversion
+
+font
+
+setting theme
+
+funny error messages
+
+secret music
+
+#### Things are done
+
 
 %
 
@@ -76,7 +97,6 @@ factorial 0.45!
 negative
 
 optimize coding
-
 
 
 
