@@ -85,6 +85,8 @@ funny error messages
 
 secret music
 
+store, x y
+
 #### Things are done
 
 
