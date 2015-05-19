@@ -3,14 +3,13 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp"
     tools:context=".MainActivity"
     android:id="@+id/calculator">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="20dp"
+        android:layout_margin="0dp"
         android:id="@+id/history"
         android:gravity="right"
         android:textSize="20sp" />

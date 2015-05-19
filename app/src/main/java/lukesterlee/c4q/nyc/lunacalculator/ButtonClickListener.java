@@ -14,12 +14,13 @@ import java.util.Stack;
 
 public class ButtonClickListener implements View.OnClickListener {
 
+    TextView panelHistory;
     TextView panel;
 
     String print;
     String ans;
 
-    int lastCode;
+    inputType lastCode;
     int open;
     int close;
 
@@ -32,21 +33,22 @@ public class ButtonClickListener implements View.OnClickListener {
 
     Stack<String> input;
     Stack<String> display;
-    Stack<String> history;
+    String history;
 
-    public ButtonClickListener(TextView panel, Button sin, Button cos, Button tan) {
+    public ButtonClickListener(TextView panel, TextView panelHistory, Button sin, Button cos, Button tan) {
         input = new Stack<String>();
         display = new Stack<String>();
-        history = new Stack<String>();
+        history = "";
 
         this.sin = sin;
         this.cos = cos;
         this.tan = tan;
 
         this.panel = panel;
+        this.panelHistory = panelHistory;
+
         print = "";
         ans = "0";
-        lastCode = 0;
         open = 0;
         close = 0;
 
@@ -230,36 +232,75 @@ public class ButtonClickListener implements View.OnClickListener {
      *          7 for e,pi,!,%
      *          8 for ^
      */
-    public int lastDetection() {
+    public inputType lastDetection() throws Exception {
 
         if (display.empty()) {
-            return 0;
+            return inputType.EMPTY;
         }
 
         String last = display.peek();
         if (Character.isDigit(last.charAt(0))) {
-            return 1;
+            return inputType.DIGIT;
         } else if (last.equals(".")) {
-            return 2;
+            return inputType.DOT;
         } else if (last.equals("+") || last.equals("-") || last.equals("*") || last.equals("/")) {
-            return 3;
-        } else if (last.equals("sin(") || last.equals("cos(") || last.equals("tan(")) {
-            return 4;
+            return inputType.OPERATOR;
+        } else if (last.equals("sin(") || last.equals("cos(") || last.equals("tan(") || last.equals("asin(") || last.equals("acos(") || last.equals("atan(")) {
+            return inputType.TRIG;
         }
         // ln( , log( , √( , (
         else if (last.endsWith("(")) {
-            return 5;
+            return inputType.LPARENT;
         } else if (last.equals(")")) {
-            return 6;
-        } else if (last.equals("e") || last.equals("π") || last.equals("!") || last.equals("%")) {
-            return 7;
-        } else if (last.equals("^")) {
-            return 8;
+            return inputType.RPARENT;
+        } else if (last.equals("e") || last.equals("π") )
+         {
+            return inputType.CONSTANT;
+        } else if(last.equals("!") || last.equals("%")) {
+            return inputType.UNARY;
+        }
+        else if (last.equals("^")) {
+            return inputType.EXP;
         } else if (last.equals("syntax error")) {
             display.clear();
-            return 0;
+            return inputType.EMPTY;
         }
-        return -1;
+        throw new Exception("did not recognize the input");
+    }
+
+    private enum inputType {
+        EMPTY,
+        DIGIT,
+        DOT,
+        OPERATOR,
+        TRIG,
+        LPARENT,
+        RPARENT,
+        CONSTANT,
+        UNARY,
+        EXP,
+    }
+
+    public void add(String first) {
+        input.add(first);
+        display.add(first);
+    }
+
+    public void add(String first, String second) {
+        add(first);
+        add(second);
+    }
+
+    public void add(String first, String second, String third) {
+        add(first, second);
+        add(third);
+    }
+
+    public void concatenate(String number) {
+        String newNumber = input.pop() + number;
+        input.push(newNumber);
+        display.pop();
+        display.push(newNumber);
     }
 
 
@@ -269,73 +310,55 @@ public class ButtonClickListener implements View.OnClickListener {
         lastCode = lastDetection();
         switch (lastCode) {
 
-            case 0 :
-                input.push(number);
-                display.push(number);
+            case EMPTY:
+                add(number);
                 break;
 
             // 0~9
-            case 1 :
+            case DIGIT :
                 if (!input.empty()) {
-                    String newNumber = input.pop() + number;
-                    input.push(newNumber);
-                    display.pop();
-                    display.push(newNumber);
+                    concatenate(number);
                 } else {
-                    input.push(number);
                     display.clear();
-                    display.push(number);
+                    add(number);
                 }
                 break;
 
             // .
             case 2 :
-                input.push(number);
-                display.push(number);
+                add(number);
                 break;
 
             // + - * /
             case 3 :
-                input.push(number);
-                display.push(number);
+                add(number);
                 break;
 
             // sin( , cos( , tan(
             case 4 :
-                input.push(number);
-                display.push(number);
+                add(number);
                 break;
 
             // ln( , log( , (
             case 5 :
-                input.push(number);
-                display.push(number);
+                add(number);
                 break;
 
             // )
             case 6 :
-                input.push("*");
-                input.push(number);
-                display.push("*");
-                display.push(number);
+                add("*", number);
                 break;
 
             // e, pi, !, %
             case 7 :
-                input.push("*");
-                input.push(number);
-                display.push("*");
-                display.push(number);
+                add("*", number);
                 break;
 
             // ^
             case 8 :
-                input.push(number);
-                display.push(number);
+                add(number);
                 break;
-
         }
-
     }
 
     public void handleOperators(String operator) {
@@ -347,8 +370,7 @@ public class ButtonClickListener implements View.OnClickListener {
             case 0 :
                 input.push(ans);
                 display.push("Ans");
-                input.push(operator);
-                display.push(operator);
+                add(operator);
                 break;
 
             // 0~9
@@ -356,8 +378,7 @@ public class ButtonClickListener implements View.OnClickListener {
                 if (input.empty()) {
                     input.push(display.peek());
                 }
-                input.push(operator);
-                display.push(operator);
+                add(operator);
                 break;
 
             // .
@@ -367,9 +388,8 @@ public class ButtonClickListener implements View.OnClickListener {
             // + - * /
             case 3 :
                 input.pop();
-                input.push(operator);
                 display.pop();
-                display.push(operator);
+                add(operator);
                 break;
 
             // sin( , cos( , tan(
@@ -382,14 +402,12 @@ public class ButtonClickListener implements View.OnClickListener {
 
             // )
             case 6 :
-                input.push(operator);
-                display.push(operator);
+                add(operator);
                 break;
 
             // e, pi, !, %
             case 7 :
-                input.push(operator);
-                display.push(operator);
+                add(operator);
                 break;
 
             // ^
@@ -397,8 +415,6 @@ public class ButtonClickListener implements View.OnClickListener {
                 break;
 
         }
-
-
     }
 
     public void handleAC() {
@@ -486,23 +502,16 @@ public class ButtonClickListener implements View.OnClickListener {
 
             // empty
             case 0 :
-                input.push("0");
-                input.push(".");
-                display.push("0");
-                display.push(".");
+                add("0", ".");
                 break;
 
             // 0~9
             case 1 :
                 if (input.empty()) {
                     display.pop();
-                    input.push("0");
-                    input.push(".");
-                    display.push("0");
-                    display.push(".");
+                    add("0", ".");
                 } else {
-                    input.push(".");
-                    display.push(".");
+                    add(".");
                 }
 
                 break;
@@ -513,54 +522,32 @@ public class ButtonClickListener implements View.OnClickListener {
 
             // + - * /
             case 3 :
-                input.push("0");
-                input.push(".");
-                display.push("0");
-                display.push(".");
+                add("0", ".");
                 break;
 
             // sin( , cos( , tan(
             case 4 :
-                input.push("0");
-                input.push(".");
-                display.push("0");
-                display.push(".");
+                add("0", ".");
                 break;
 
             // ln( , log( , (
             case 5 :
-                input.push("0");
-                input.push(".");
-                display.push("0");
-                display.push(".");
+                add("0", ".");
                 break;
 
             // )
             case 6 :
-                input.push("*");
-                input.push("0");
-                input.push(".");
-                display.push("*");
-                display.push("0");
-                display.push(".");
+                add("*", "0", ".");
                 break;
 
             // e, pi, !, %
             case 7 :
-                input.push("*");
-                input.push("0");
-                input.push(".");
-                display.push("*");
-                display.push("0");
-                display.push(".");
+                add("*", "0", ".");
                 break;
 
             // ^
             case 8 :
-                input.push("0");
-                input.push(".");
-                display.push("0");
-                display.push(".");
+                add("0", ".");
                 break;
 
         }
@@ -568,6 +555,8 @@ public class ButtonClickListener implements View.OnClickListener {
     }
 
     public void handleFunction(String symbol, String symbolDisplay, boolean isParenthesis) {
+
+
 
         lastCode = lastDetection();
         switch (lastCode) {
@@ -663,6 +652,9 @@ public class ButtonClickListener implements View.OnClickListener {
 
             // 0~9
             case 1 :
+                if (input.empty()) {
+                    input.push(display.peek());
+                }
                 input.push("^");
                 display.push("^");
                 break;
@@ -720,12 +712,17 @@ public class ButtonClickListener implements View.OnClickListener {
                     input.push("(");
                     display.push("(");
                     open++;
-                } else {
+                } else if (open > close) {
                     input.push(")");
                     display.push(")");
                     close++;
+                } else {
+                    input.push("*");
+                    display.push("*");
+                    input.push("(");
+                    display.push("(");
+                    open++;
                 }
-
                 break;
 
             // .
@@ -868,10 +865,7 @@ public class ButtonClickListener implements View.OnClickListener {
 
             // + - * /
             case 3 :
-                input.push("(");
-                display.push("(");
-                input.push("-");
-                display.push("-");
+                add("(", "-");
                 open++;
                 break;
 
@@ -889,22 +883,12 @@ public class ButtonClickListener implements View.OnClickListener {
 
             // )
             case 6 :
-                input.push("*");
-                display.push("*");
-                input.push("(");
-                display.push("(");
-                input.push("-");
-                display.push("-");
+                add("*", "(", "-");
                 break;
 
             // e, pi, !, %
             case 7 :
-                input.push("*");
-                display.push("*");
-                input.push("(");
-                display.push("(");
-                input.push("-");
-                display.push("-");
+                add("*", "(", "-");
                 break;
 
             // ^
@@ -924,6 +908,8 @@ public class ButtonClickListener implements View.OnClickListener {
 
     public void handleFactorial() {
 
+        String last;
+        String secondToLast;
 
         lastCode = lastDetection();
         switch (lastCode) {
@@ -939,12 +925,28 @@ public class ButtonClickListener implements View.OnClickListener {
                 if (input.empty()) {
                     input.push(display.peek());
                 }
-                if (!input.peek().equals(".")) {
-                    String number = input.pop();
+
+                int size = input.size();
+
+                if (size == 1) {
+                    last = input.pop();
                     display.pop();
-                    input.push(Long.toString(factorial(Long.parseLong(number))));
-                    display.push(number + "!");
+                    input.push(Long.toString(factorial(Long.parseLong(last))));
+                    display.push(last + "!");
+                } else {
+                    last = input.pop();
+                    secondToLast = input.pop();
+                    if (secondToLast.equals(".")) {
+                        input.push(secondToLast);
+                        input.push(last);
+                    } else {
+                        input.push(secondToLast);
+                        display.pop();
+                        input.push(Long.toString(factorial(Long.parseLong(last))));
+                        display.push(last + "!");
+                    }
                 }
+
 
                 break;
 
@@ -1049,6 +1051,7 @@ public class ButtonClickListener implements View.OnClickListener {
         // test if the user misses parenthesis.
         while (open > close) {
             input.push(")");
+            display.push(")");
             close++;
         }
 
@@ -1062,9 +1065,14 @@ public class ButtonClickListener implements View.OnClickListener {
         try {
             BigDecimal parse = expression.eval();
             ans = parse.toPlainString();
+            history = stackToString(display) + " = " + ans;
             display.clear();
             input.clear();
             display.push(ans);
+            if (panelHistory != null) {
+                panelHistory.setText(history);
+            }
+
         } catch(Exception e) {
             input.clear();
             display.clear();

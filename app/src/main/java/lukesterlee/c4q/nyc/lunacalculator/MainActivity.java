@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends Activity {
 
+    TextView history;
     TextView panel;
     ArrayList<Button> buttons;
 
@@ -26,6 +27,7 @@ public class MainActivity extends Activity {
 
         setContentView(R.layout.activity_main);
         panel = (TextView) findViewById(R.id.panel);
+        history = (TextView) findViewById(R.id.history);
 
         Button sin = (Button) findViewById(R.id.buttonSin);
         Button cos = (Button) findViewById(R.id.buttonCos);
@@ -65,7 +67,7 @@ public class MainActivity extends Activity {
         buttons.add((Button) findViewById(R.id.button2nd));
         buttons.add((Button) findViewById(R.id.buttonNega));
 
-        ButtonClickListener listener = new ButtonClickListener(panel, sin, cos, tan);
+        ButtonClickListener listener = new ButtonClickListener(panel, history, sin, cos, tan);
 
         for (Button button : buttons) {
             if (button != null) {
