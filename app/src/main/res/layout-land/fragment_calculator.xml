@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="25dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1">
 
 
@@ -26,12 +26,12 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="50dp"
             android:background="@drawable/button_white"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/panel"
@@ -61,7 +61,8 @@
             android:textColor="#FFFFFF"
             android:id="@+id/buttonAC"
             android:background="@drawable/button_equal"
-            android:text="AC" />
+            android:text="AC"
+            android:textSize="25dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -70,7 +71,8 @@
             android:fontFamily="sans-serif-thin"
             android:layout_weight="1"
             android:id="@+id/buttonAns"
-            android:text="Ans" />
+            android:text="Ans"
+            android:textSize="25dp" />
 
 
         <Button
@@ -80,7 +82,8 @@
             android:fontFamily="sans-serif-thin"
             android:layout_weight="1"
             android:id="@+id/buttonParenthesis"
-            android:text="()" />
+            android:text="( )"
+            android:textSize="25dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -90,7 +93,8 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/buttonDegree"
-            android:text="DEG" />
+            android:text="DEG"
+            android:textSize="25dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -100,7 +104,8 @@
             android:layout_weight="1"
             android:textColor="#D7D7D7"
             android:id="@+id/buttonRadian"
-            android:text="RAD" />
+            android:text="RAD"
+            android:textSize="25dp" />
 
 
 
@@ -114,7 +119,8 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/buttonDivided"
-            android:text="/" />
+            android:text="/"
+            android:textSize="25dp" />
 
 
 
@@ -127,7 +133,8 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/buttonDEL"
-            android:text="DEL" />
+            android:text="DEL"
+            android:textSize="25dp" />
 
 
 
@@ -148,7 +155,8 @@
             android:layout_weight="1"
             android:id="@+id/buttonSin"
             android:text="sin"
-            android:capitalize="none" />
+            android:capitalize="none"
+            android:textSize="25dp" />
 
 
 
@@ -159,7 +167,8 @@
             android:fontFamily="sans-serif-thin"
             android:layout_weight="1"
             android:id="@+id/buttonLog"
-            android:text="log" />
+            android:text="log"
+            android:textSize="25dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -170,7 +179,8 @@
             android:id="@+id/buttonE"
             android:text="e"
             android:capitalize="none"
-            android:clickable="true" />
+            android:clickable="true"
+            android:textSize="25dp" />
 
 
         <Button
@@ -180,7 +190,8 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/button7"
-            android:text="7" />
+            android:text="7"
+            android:textSize="25dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -189,7 +200,8 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/button8"
-            android:text="8" />
+            android:text="8"
+            android:textSize="25dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -198,7 +210,8 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/button9"
-            android:text="9" />
+            android:text="9"
+            android:textSize="25dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -207,7 +220,8 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/buttonMultiple"
-            android:text="*" />
+            android:text="*"
+            android:textSize="25dp" />
 
 
 
@@ -228,7 +242,8 @@
             android:layout_weight="1"
             android:id="@+id/buttonCos"
             android:text="cos"
-            android:capitalize="none" />
+            android:capitalize="none"
+            android:textSize="25dp" />
 
 
 
@@ -241,7 +256,8 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/buttonFactorial"
-            android:text="!" />
+            android:text="!"
+            android:textSize="25dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -250,7 +266,8 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/buttonPi"
-            android:text="π" />
+            android:text="π"
+            android:textSize="25dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -259,7 +276,8 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/button4"
-            android:text="4" />
+            android:text="4"
+            android:textSize="25dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -268,7 +286,8 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/button5"
-            android:text="5" />
+            android:text="5"
+            android:textSize="25dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -277,7 +296,8 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/button6"
-            android:text="6" />
+            android:text="6"
+            android:textSize="25dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -286,7 +306,8 @@
             android:fontFamily="sans-serif-thin"
             android:id="@+id/buttonMinus"
             android:background="@drawable/button_gray"
-            android:text="-" />
+            android:text="-"
+            android:textSize="25dp" />
 
 
 
@@ -306,7 +327,9 @@
             android:fontFamily="sans-serif-thin"
             android:layout_weight="1"
             android:id="@+id/buttonTan"
-            android:text="tan" />
+            android:text="tan"
+            android:textSize="25dp"
+            android:capitalize="none" />
 
 
 
@@ -319,7 +342,8 @@
             android:fontFamily="sans-serif-thin"
             android:layout_weight="1"
             android:id="@+id/buttonLn"
-            android:text="ln" />
+            android:text="ln"
+            android:textSize="25dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -329,7 +353,7 @@
             android:fontFamily="sans-serif-thin"
             android:id="@+id/buttonPercentage"
             android:text="%"
-            />
+            android:textSize="25dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -338,7 +362,8 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/button1"
-            android:text="1" />
+            android:text="1"
+            android:textSize="25dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -347,7 +372,8 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/button2"
-            android:text="2" />
+            android:text="2"
+            android:textSize="25dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -356,7 +382,8 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/button3"
-            android:text="3" />
+            android:text="3"
+            android:textSize="25dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -365,7 +392,8 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/buttonAdd"
-            android:text="+" />
+            android:text="+"
+            android:textSize="25dp" />
 
 
 
@@ -386,7 +414,8 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/button2nd"
-            android:text="2ND" />
+            android:text="2ND"
+            android:textSize="25dp" />
 
 
 
@@ -399,7 +428,8 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/buttonRoot"
-            android:text="√" />
+            android:text="√"
+            android:textSize="25dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -408,7 +438,8 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/buttonExp"
-            android:text="^" />
+            android:text="^"
+            android:textSize="25dp" />
 
 
         <Button
@@ -418,7 +449,8 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/button0"
-            android:text="0" />
+            android:text="0"
+            android:textSize="25dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -427,7 +459,8 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/buttonDot"
-            android:text="." />
+            android:text="."
+            android:textSize="25dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -436,7 +469,8 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/buttonNega"
-            android:text="(-)" />
+            android:text="( - )"
+            android:textSize="25dp" />
 
 
 
@@ -448,7 +482,8 @@
             android:fontFamily="sans-serif-thin"
             android:id="@+id/buttonEqual"
             android:background="@drawable/button_green2"
-            android:text="=" />
+            android:text="="
+            android:textSize="25dp" />
 
 
     </LinearLayout>
