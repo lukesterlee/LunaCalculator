@@ -1,6 +1,6 @@
 package lukesterlee.c4q.nyc.lunacalculator;
 
-import android.util.Log;
+import android.graphics.Color;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,29 +20,34 @@ public class ButtonClickListener implements View.OnClickListener {
     String print;
     String ans;
 
-    inputType lastCode;
+    lastInputType lastCode;
     int open;
     int close;
 
     boolean is2ndOn;
     boolean isRadian;
+    boolean isRadStarted;
 
     Button sin;
     Button cos;
     Button tan;
+    Button deg;
+    Button rad;
 
-    Stack<String> input;
+    Stack<String> expression;
     Stack<String> display;
     String history;
 
-    public ButtonClickListener(TextView panel, TextView panelHistory, Button sin, Button cos, Button tan) {
-        input = new Stack<String>();
+    public ButtonClickListener(TextView panel, TextView panelHistory, Button sin, Button cos, Button tan, Button deg, Button rad) {
+        expression = new Stack<String>();
         display = new Stack<String>();
         history = "";
 
         this.sin = sin;
         this.cos = cos;
         this.tan = tan;
+        this.deg = deg;
+        this.rad = rad;
 
         this.panel = panel;
         this.panelHistory = panelHistory;
@@ -54,14 +59,13 @@ public class ButtonClickListener implements View.OnClickListener {
 
         is2ndOn = false;
         isRadian = false;
+        isRadStarted = false;
     }
 
     @Override
     public void onClick(View view) {
         Button button = (Button) view;
         switch (button.getId()) {
-
-            // cases for numbers
             case R.id.button0 :
                 handleNumbers("0");
                 break;
@@ -93,8 +97,6 @@ public class ButtonClickListener implements View.OnClickListener {
                 handleNumbers("9");
                 break;
 
-
-            // cases for operators (+,-,*,/)
             case R.id.buttonAdd :
                 handleOperators("+");
                 break;
@@ -108,12 +110,9 @@ public class ButtonClickListener implements View.OnClickListener {
                 handleOperators("/");
                 break;
 
-
             case R.id.buttonDot :
                 handleDot();
                 break;
-
-
 
             case R.id.buttonNega :
                 handleNegative();
@@ -122,7 +121,9 @@ public class ButtonClickListener implements View.OnClickListener {
                 handleParenthesis();
                 break;
 
-
+            case R.id.buttonPercentage :
+                handlePercentage();
+                break;
 
             case R.id.buttonExp :
                 handleExp();
@@ -131,30 +132,58 @@ public class ButtonClickListener implements View.OnClickListener {
                 handleFactorial();
                 break;
 
-
-
-
             case R.id.buttonSin :
                 if (is2ndOn) {
-                    handleFunction("asin(", "asin(", true);
-                } else {
-                    handleFunction("sin(", "sin(", true);
+                    if (isRadian) {
+                        handleFunction("asin(deg(", "asin(", true);
+                        isRadStarted = true;
+                    } else {
+                        handleFunction("asin(", "asin(", true);
+                    }
+                }
+                else {
+                    if (isRadian) {
+                        handleFunction("sin(deg(", "sin(", true);
+                        isRadStarted = true;
+                    } else {
+                        handleFunction("sin(", "sin(", true);
+                    }
                 }
                 break;
             case R.id.buttonCos :
                 if (is2ndOn) {
-                    handleFunction("acos(", "acos(", true);
-                } else {
-                    handleFunction("cos(", "cos(", true);
+                    if (isRadian) {
+                        handleFunction("acos(deg(", "acos(", true);
+                        isRadStarted = true;
+                    } else {
+                        handleFunction("acos(", "acos(", true);
+                    }
                 }
-                break;
+                else {
+                    if (isRadian) {
+                        handleFunction("cos(deg(", "cos(", true);
+                        isRadStarted = true;
+                    } else {
+                        handleFunction("cos(", "cos(", true);
+                    }
+                }
             case R.id.buttonTan :
                 if (is2ndOn) {
-                    handleFunction("atan(", "atan(", true);
-                } else {
-                    handleFunction("tan(", "tan(", true);
+                    if (isRadian) {
+                        handleFunction("atan(deg(", "atan(", true);
+                        isRadStarted = true;
+                    } else {
+                        handleFunction("atan(", "atan(", true);
+                    }
                 }
-                break;
+                else {
+                    if (isRadian) {
+                        handleFunction("tan(deg(", "tan(", true);
+                        isRadStarted = true;
+                    } else {
+                        handleFunction("tan(", "tan(", true);
+                    }
+                }
             case R.id.buttonLn :
                 handleFunction("log(", "ln(", true);
                 break;
@@ -171,26 +200,50 @@ public class ButtonClickListener implements View.OnClickListener {
                 handleFunction("e", "e", false);
                 break;
 
-
-
             case R.id.button2nd :
                 if (is2ndOn) {
                     is2ndOn = false;
                     sin.setText("sin");
                     cos.setText("cos");
                     tan.setText("tan");
+                    sin.setBackgroundResource(R.drawable.button_lightgray);
+                    cos.setBackgroundResource(R.drawable.button_lightgray);
+                    tan.setBackgroundResource(R.drawable.button_lightgray);
+                    sin.setTextColor(Color.parseColor("#000000"));
+                    cos.setTextColor(Color.parseColor("#000000"));
+                    tan.setTextColor(Color.parseColor("#000000"));
                 } else {
                     is2ndOn = true;
                     sin.setText("asin");
                     cos.setText("acos");
                     tan.setText("atan");
+                    sin.setBackgroundResource(R.drawable.button_green2);
+                    cos.setBackgroundResource(R.drawable.button_green2);
+                    tan.setBackgroundResource(R.drawable.button_green2);
+                    sin.setTextColor(Color.parseColor("#FFFFFF"));
+                    cos.setTextColor(Color.parseColor("#FFFFFF"));
+                    tan.setTextColor(Color.parseColor("#FFFFFF"));
                 }
-
                 break;
+
+            case R.id.buttonDegree :
+                isRadian = false;
+                deg.setBackgroundResource(R.drawable.button_green2);
+                deg.setTextColor(Color.parseColor("#FFFFFF"));
+                rad.setBackgroundResource(R.drawable.button_gray);
+                rad.setTextColor(Color.parseColor("#D7D7D7"));
+                break;
+            case R.id.buttonRadian :
+                isRadian = true;
+                rad.setBackgroundResource(R.drawable.button_green2);
+                rad.setTextColor(Color.parseColor("#FFFFFF"));
+                deg.setBackgroundResource(R.drawable.button_gray);
+                deg.setTextColor(Color.parseColor("#D7D7D7"));
+                break;
+
             case R.id.buttonAns :
                 handleAns();
                 break;
-
 
             case R.id.buttonDEL :
                 handleDel();
@@ -199,30 +252,25 @@ public class ButtonClickListener implements View.OnClickListener {
                 handleAC();
                 break;
 
-
             case R.id.buttonEqual :
                 handleEqual();
                 break;
 
         }
-
-
-
         print = stackToString(display);
         panel.setText(print);
     }
 
-    private enum inputType {
+    private enum lastInputType {
         EMPTY,
         DIGIT,
         DOT,
         OPERATOR,
-        TRIG,
         LPARENT,
         RPARENT,
-        CONSTANT,
-        UNARY,
+        CONSTANT_UNARY,
         EXP,
+        ERROR
     }
 
     public String stackToString(Stack<String> stack) {
@@ -234,56 +282,35 @@ public class ButtonClickListener implements View.OnClickListener {
         return print;
     }
 
-    /*
-     * return : 0 for empty
-     *          1 for numbers
-     *          2 for dot
-     *          3 for operators
-     *          4 for sin( cos( tan(
-     *          5 for ln( log( √(  (
-     *          6 for )
-     *          7 for e,pi,!,%
-     *          8 for ^
-     */
-    public inputType lastDetection() throws Exception {
-
+    public lastInputType lastDetection() {
         if (display.empty()) {
-            return inputType.EMPTY;
+            return lastInputType.EMPTY;
         }
-
         String last = display.peek();
         if (Character.isDigit(last.charAt(0))) {
-            return inputType.DIGIT;
+            return lastInputType.DIGIT;
         } else if (last.equals(".")) {
-            return inputType.DOT;
+            return lastInputType.DOT;
         } else if (last.equals("+") || last.equals("-") || last.equals("*") || last.equals("/")) {
-            return inputType.OPERATOR;
-        } else if (last.equals("sin(") || last.equals("cos(") || last.equals("tan(") || last.equals("asin(") || last.equals("acos(") || last.equals("atan(")) {
-            return inputType.TRIG;
-        }
-        // ln( , log( , √( , (
-        else if (last.endsWith("(")) {
-            return inputType.LPARENT;
+            return lastInputType.OPERATOR;
+        } else if (last.endsWith("(")) {
+            return lastInputType.LPARENT;
         } else if (last.equals(")")) {
-            return inputType.RPARENT;
-        } else if (last.equals("e") || last.equals("π") )
-         {
-            return inputType.CONSTANT;
-        } else if(last.equals("!") || last.equals("%")) {
-            return inputType.UNARY;
-        }
-        else if (last.equals("^")) {
-            return inputType.EXP;
+            return lastInputType.RPARENT;
+        } else if (last.equals("e") || last.equals("π") || last.equals("!") || last.equals("%")) {
+            return lastInputType.CONSTANT_UNARY;
+        } else if (last.equals("^")) {
+            return lastInputType.EXP;
         } else if (last.equals("syntax error")) {
             display.clear();
-            return inputType.EMPTY;
+            return lastInputType.EMPTY;
         }
-        throw new Exception("did not recognize the input");
+        return lastInputType.ERROR;
     }
 
-    public void add(String first) {
-        input.add(first);
-        display.add(first);
+    public void add(String input) {
+        expression.add(input);
+        display.add(input);
     }
 
     public void add(String first, String second) {
@@ -296,129 +323,62 @@ public class ButtonClickListener implements View.OnClickListener {
         add(third);
     }
 
+    public void delete() {
+        expression.pop();
+        display.pop();
+    }
+
     public void concatenate(String number) {
-        String newNumber = input.pop() + number;
-        input.push(newNumber);
+        String newNumber = expression.pop() + number;
+        expression.push(newNumber);
         display.pop();
         display.push(newNumber);
     }
 
-
-    // handling numbers.
     public void handleNumbers(String number) {
-
         lastCode = lastDetection();
         switch (lastCode) {
-
-            case EMPTY:
-                add(number);
-                break;
-
-            // 0~9
-            case DIGIT :
-                if (!input.empty()) {
+            case DIGIT:
+                if (!expression.empty())
                     concatenate(number);
-                } else {
+                else {
                     display.clear();
                     add(number);
                 }
                 break;
-
-            // .
-            case 2 :
-                add(number);
-                break;
-
-            // + - * /
-            case 3 :
-                add(number);
-                break;
-
-            // sin( , cos( , tan(
-            case 4 :
-                add(number);
-                break;
-
-            // ln( , log( , (
-            case 5 :
-                add(number);
-                break;
-
-            // )
-            case 6 :
+            case RPARENT: case CONSTANT_UNARY:
                 add("*", number);
                 break;
-
-            // e, pi, !, %
-            case 7 :
-                add("*", number);
-                break;
-
-            // ^
-            case 8 :
+            default:
                 add(number);
-                break;
         }
     }
 
     public void handleOperators(String operator) {
-
         lastCode = lastDetection();
         switch (lastCode) {
-
-            // empty
-            case 0 :
-                input.push(ans);
+            case EMPTY:
+                expression.push(ans);
                 display.push("Ans");
                 add(operator);
                 break;
-
-            // 0~9
-            case 1 :
-                if (input.empty()) {
-                    input.push(display.peek());
-                }
+            case DIGIT:
+                if (expression.empty())
+                    expression.push(display.peek());
                 add(operator);
                 break;
-
-            // .
-            case 2 :
-                break;
-
-            // + - * /
-            case 3 :
-                input.pop();
-                display.pop();
+            case OPERATOR:
+                delete();
                 add(operator);
                 break;
-
-            // sin( , cos( , tan(
-            case 4 :
-                break;
-
-            // ln( , log( , (
-            case 5 :
-                break;
-
-            // )
-            case 6 :
+            case RPARENT: case CONSTANT_UNARY:
                 add(operator);
                 break;
-
-            // e, pi, !, %
-            case 7 :
-                add(operator);
-                break;
-
-            // ^
-            case 8 :
-                break;
-
         }
     }
 
     public void handleAC() {
-        input.clear();
+        expression.clear();
         display.clear();
         print = "";
         open = 0;
@@ -426,359 +386,173 @@ public class ButtonClickListener implements View.OnClickListener {
     }
 
     public void handleDel() {
-
         lastCode = lastDetection();
         switch (lastCode) {
-
-            // empty
-            case 0 :
-                break;
-
-            // 0~9
-            case 1 :
-                if (input.empty()) {
-                    input.push(display.peek());
-                }
-                String delNumber = input.pop();
+            case DIGIT:
+                if (expression.empty())
+                    expression.push(display.peek());
+                String delNumber = expression.pop();
                 display.pop();
                 if(delNumber.length() != 1) {
                     delNumber = delNumber.substring(0, delNumber.length()-1);
-                    input.push(delNumber);
+                    expression.push(delNumber);
                     display.push(delNumber);
                 }
                 break;
-
-            // .
-            case 2 :
-                input.pop();
-                display.pop();
+            case DOT: case OPERATOR: case CONSTANT_UNARY: case EXP:
+                delete();
                 break;
-
-            // + - * /
-            case 3 :
-                input.pop();
-                display.pop();
-                break;
-
-            // sin( , cos( , tan(
-            case 4 :
-                input.pop();
-                display.pop();
+            case LPARENT:
+                delete();
                 open--;
                 break;
-
-            // ln( , log( , (
-            case 5 :
-                input.pop();
-                display.pop();
-                open--;
-                break;
-
-            // )
-            case 6 :
-                input.pop();
-                display.pop();
+            case RPARENT:
+                delete();
                 close--;
                 break;
-
-            // e, pi, !, %
-            case 7 :
-                input.pop();
-                display.pop();
-                break;
-
-            // ^
-            case 8 :
-                input.pop();
-                display.pop();
-                break;
-
         }
     }
 
     public void handleDot() {
         lastCode = lastDetection();
         switch (lastCode) {
-
-            // empty
-            case 0 :
-                add("0", ".");
-                break;
-
-            // 0~9
-            case 1 :
-                if (input.empty()) {
+            case DIGIT:
+                if (expression.empty()) {
                     display.pop();
                     add("0", ".");
-                } else {
+                } else
                     add(".");
-                }
-
                 break;
-
-            // .
-            case 2 :
-                break;
-
-            // + - * /
-            case 3 :
+            case OPERATOR: case LPARENT: case EMPTY: case EXP:
                 add("0", ".");
                 break;
-
-            // sin( , cos( , tan(
-            case 4 :
-                add("0", ".");
-                break;
-
-            // ln( , log( , (
-            case 5 :
-                add("0", ".");
-                break;
-
-            // )
-            case 6 :
+            case RPARENT: case CONSTANT_UNARY:
                 add("*", "0", ".");
                 break;
-
-            // e, pi, !, %
-            case 7 :
-                add("*", "0", ".");
-                break;
-
-            // ^
-            case 8 :
-                add("0", ".");
-                break;
-
         }
-
     }
 
     public void handleFunction(String symbol, String symbolDisplay, boolean isParenthesis) {
-
-
-
         lastCode = lastDetection();
         switch (lastCode) {
-
-            // empty
-            case 0 :
-                input.push(symbol);
+            case DIGIT:
+                if (expression.empty())
+                    expression.push(display.peek());
+                add("*");
+                expression.push(symbol);
                 display.push(symbolDisplay);
                 if (isParenthesis)
                     open++;
                 break;
-
-            // 0~9
-            case 1 :
-                if (input.empty()) {
-                    input.push(display.peek());
-                }
-                input.push("*");
-                input.push(symbol);
-                display.push("*");
+            case OPERATOR: case LPARENT: case EXP: case EMPTY:
+                expression.push(symbol);
                 display.push(symbolDisplay);
                 if (isParenthesis)
                     open++;
                 break;
-
-            // .
-            case 2 :
-                break;
-
-            // + - * /
-            case 3 :
-                input.push(symbol);
+            case RPARENT: case CONSTANT_UNARY:
+                add("*");
+                expression.push(symbol);
                 display.push(symbolDisplay);
                 if (isParenthesis)
                     open++;
                 break;
-
-            // sin( , cos( , tan(
-            case 4 :
-                input.push(symbol);
-                display.push(symbolDisplay);
-                if (isParenthesis)
-                    open++;
-                break;
-
-            // ln( , log( , (
-            case 5 :
-                input.push(symbol);
-                display.push(symbolDisplay);
-                if (isParenthesis)
-                    open++;
-                break;
-
-            // )
-            case 6 :
-                input.push("*");
-                input.push(symbol);
-                display.push("*");
-                display.push(symbolDisplay);
-                if (isParenthesis)
-                    open++;
-                break;
-
-            // e, pi, !, %
-            case 7 :
-                input.push("*");
-                input.push(symbol);
-                display.push("*");
-                display.push(symbolDisplay);
-                if (isParenthesis)
-                    open++;
-                break;
-
-            // ^
-            case 8 :
-                input.push(symbol);
-                display.push(symbolDisplay);
-                if (isParenthesis)
-                    open++;
-                break;
-
         }
     }
-
 
     public void handleExp() {
         lastCode = lastDetection();
         switch (lastCode) {
-
-            // empty
-            case 0 :
+            case EMPTY:
+                expression.push(ans);
+                display.push("Ans");
+                add("^");
                 break;
-
-            // 0~9
-            case 1 :
-                if (input.empty()) {
-                    input.push(display.peek());
-                }
-                input.push("^");
-                display.push("^");
+            case DIGIT:
+                if (expression.empty())
+                    expression.push(display.peek());
+                add("^");
                 break;
-
-            // .
-            case 2 :
+            case RPARENT: case CONSTANT_UNARY:
+                add("^");
                 break;
+        }
+    }
 
-            // + - * /
-            case 3 :
+    public void handlePercentage() {
+
+        String last;
+        String secondToLast;
+        String thirdToLast;
+
+        lastCode = lastDetection();
+        switch (lastCode) {
+            case EMPTY:
+                expression.push("0");
+                display.push("0%");
                 break;
-
-            // sin( , cos( , tan(
-            case 4 :
+            case DIGIT:
+                if (expression.empty())
+                    expression.push(display.peek());
+                expression.push("*");
+                expression.push("0");
+                expression.push(".");
+                expression.push("01");
+                display.push("%");
                 break;
-
-            // ln( , log( , (
-            case 5 :
+            case RPARENT: case CONSTANT_UNARY:
+                expression.push("*");
+                expression.push("0");
+                expression.push(".");
+                expression.push("01");
+                display.push("%");
                 break;
-
-            // )
-            case 6 :
-                input.push("^");
-                display.push("^");
-                break;
-
-            // e, pi, !, %
-            case 7 :
-                input.push("^");
-                display.push("^");
-                break;
-
-            // ^
-            case 8 :
-                break;
-
         }
     }
 
     public void handleParenthesis() {
         lastCode = lastDetection();
         switch (lastCode) {
-
-            // empty
-            case 0 :
-                input.push("(");
-                display.push("(");
-                open++;
-                break;
-
-            // 0~9
-            case 1 :
-                if (input.empty()) {
+            case DIGIT:
+                if (expression.empty()) {
                     display.clear();
-                    input.push("(");
-                    display.push("(");
+                    add("(");
                     open++;
                 } else if (open > close) {
-                    input.push(")");
-                    display.push(")");
+                    add(")");
                     close++;
                 } else {
-                    input.push("*");
-                    display.push("*");
-                    input.push("(");
-                    display.push("(");
+                    add("*", "(");
                     open++;
                 }
                 break;
-
-            // .
-            case 2 :
-                break;
-
-            // + - * /
-            case 3 :
-                input.push("(");
-                display.push("(");
+            case OPERATOR: case LPARENT: case EMPTY:
+                add("(");
                 open++;
                 break;
-
-            // sin( , cos( , tan(
-            case 4 :
-                input.push("(");
-                display.push("(");
-                open++;
-                break;
-
-            // ln( , log( , (
-            case 5 :
-                input.push("(");
-                display.push("(");
-                open++;
-                break;
-
-            // )
-            case 6 :
+            case RPARENT:
+                if (isRadian && isRadStarted) {
+                    expression.push(")");
+                }
                 if (open == close) {
-                    input.push("*");
-                    input.push("(");
-                    display.push("*");
-                    display.push("(");
+                    add("*", "(");
                     open++;
                 } else if (open > close) {
-                    input.push(")");
-                    display.push(")");
+                    add(")");
                     close++;
                 }
                 break;
-
-            // e, pi, !, %
-            case 7 :
-                input.push(")");
-                display.push(")");
-                close--;
+            case CONSTANT_UNARY:
+                if (open > close)
+                    add(")");
+                else
+                    add("*", "(");
+                close++;
                 break;
-
-            // ^
-            case 8 :
-                input.push("(");
-                display.push("(");
+            case EXP:
+                add("(");
                 open++;
                 break;
-
         }
     }
 
@@ -786,278 +560,136 @@ public class ButtonClickListener implements View.OnClickListener {
         String last;
         String secondLast;
         String thirdLast;
-
         lastCode = lastDetection();
         switch (lastCode) {
-
-            // empty
-            case 0 :
-                input.push("-");
-                display.push("-");
-                break;
-
-            // 0~9
-            case 1 :
-                if (input.empty()) {
-                    input.push("-");
-                    input.push(display.pop());
+            case DIGIT:
+                if (expression.empty()) {
+                    expression.push("-");
+                    expression.push(display.pop());
                     display.push("-");
-                    display.push(input.peek());
+                    display.push(expression.peek());
                 } else {
-                    if (input.size() == 1) {
-                        last = input.pop();
-                        input.push("-");
-                        input.push(last);
+                    if (expression.size() == 1) {
+                        last = expression.pop();
                         display.pop();
-                        display.push("-");
-                        display.push(last);
+                        add("-", last);
                     } else {
-                        last = input.pop();
-                        secondLast = input.pop();
-                        thirdLast = input.pop();
+                        last = expression.pop();
+                        secondLast = expression.pop();
+                        thirdLast = expression.pop();
                         display.pop();
                         display.pop();
                         display.pop();
                         if (secondLast.equals(".")) {
-                            input.push("(");
-                            input.push("-");
-                            input.push(thirdLast);
-                            input.push(secondLast);
-                            input.push(last);
-                            display.push("(");
-                            display.push("-");
-                            display.push(thirdLast);
-                            display.push(secondLast);
-                            display.push(last);
-
+                            add("(", "-");
+                            add(thirdLast, secondLast, last);
                         } else {
-                            input.push(thirdLast);
-                            input.push(secondLast);
-                            input.push("(");
-                            input.push("-");
-                            input.push(last);
-                            display.push(thirdLast);
-                            display.push(secondLast);
-                            display.push("(");
-                            display.push("-");
-                            display.push(last);
+                            add(thirdLast, secondLast);
+                            add("(", "-", last);
                         }
                         open++;
                     }
-
                 }
-
                 break;
-
-            // .
-            case 2 :
-                last = input.pop();
-                secondLast = input.pop();
+            case DOT:
+                last = expression.pop();
+                secondLast = expression.pop();
                 display.pop();
                 display.pop();
-                input.push("-");
-                display.push("-");
-                input.push(secondLast);
-                display.push(secondLast);
-                input.push(last);
-                display.push(last);
+                add("-", secondLast, last);
                 break;
-
-            // + - * /
-            case 3 :
+            case OPERATOR: case EXP:
                 add("(", "-");
                 open++;
                 break;
-
-            // sin( , cos( , tan(
-            case 4 :
-                input.push("-");
-                display.push("-");
+            case LPARENT: case EMPTY:
+                add("-");
                 break;
-
-            // ln( , log( , (
-            case 5 :
-                input.push("-");
-                display.push("-");
-                break;
-
-            // )
-            case 6 :
+            case RPARENT: case CONSTANT_UNARY:
                 add("*", "(", "-");
+                open++;
                 break;
-
-            // e, pi, !, %
-            case 7 :
-                add("*", "(", "-");
-                break;
-
-            // ^
-            case 8 :
-                break;
-
         }
     }
 
-
     public long factorial(long number) {
-        if (number == 1 || number == 0) {
+        if (number == 1 || number == 0)
             return 1;
-        }
         return factorial(number-1) * number;
     }
 
     public void handleFactorial() {
-
         String last;
         String secondToLast;
-
         lastCode = lastDetection();
         switch (lastCode) {
-
-            // empty
-            case 0 :
+            case EMPTY:
+                expression.push(Long.toString(factorial(Long.parseLong(ans))));
+                display.push("Ans");
+                display.push("!");
                 break;
-
-            // 0~9
-            case 1 :
+            case DIGIT:
                 // handle the case of 0.45
-
-                if (input.empty()) {
-                    input.push(display.peek());
+                if (expression.empty()) {
+                    expression.push(display.peek());
                 }
-
-                int size = input.size();
-
+                int size = expression.size();
                 if (size == 1) {
-                    last = input.pop();
+                    last = expression.pop();
                     display.pop();
-                    input.push(Long.toString(factorial(Long.parseLong(last))));
+                    expression.push(Long.toString(factorial(Long.parseLong(last))));
                     display.push(last + "!");
                 } else {
-                    last = input.pop();
-                    secondToLast = input.pop();
+                    last = expression.pop();
+                    secondToLast = expression.pop();
                     if (secondToLast.equals(".")) {
-                        input.push(secondToLast);
-                        input.push(last);
+                        expression.push(secondToLast);
+                        expression.push(last);
                     } else {
-                        input.push(secondToLast);
+                        expression.push(secondToLast);
                         display.pop();
-                        input.push(Long.toString(factorial(Long.parseLong(last))));
+                        expression.push(Long.toString(factorial(Long.parseLong(last))));
                         display.push(last + "!");
                     }
                 }
-
-
                 break;
-
-            // .
-            case 2 :
+            case RPARENT:
                 break;
-
-            // + - * /
-            case 3 :
+            case CONSTANT_UNARY:
                 break;
-
-            // sin( , cos( , tan(
-            case 4 :
-                break;
-
-            // ln( , log( , (
-            case 5 :
-                break;
-
-            // )
-            case 6 :
-
-                break;
-
-            // e, pi, !, %
-            case 7 :
-                break;
-
-            // ^
-            case 8 :
-                break;
-
         }
     }
 
     public void handleAns() {
         lastCode = lastDetection();
         switch (lastCode) {
-
-            // empty
-            case 0 :
-                input.push(ans);
+            case DIGIT:
+                if (expression.empty())
+                    expression.push(ans);
+                add("*");
+                expression.push(ans);
                 display.push("Ans");
                 break;
-
-            // 0~9
-            case 1 :
-                input.push("*");
-                display.push("*");
-                input.push(ans);
+            case RPARENT: case CONSTANT_UNARY:
+                add("*");
+                expression.push(ans);
                 display.push("Ans");
                 break;
-
-            // .
-            case 2 :
-                break;
-
-            // + - * /
-            case 3 :
-                input.push(ans);
+            default:
+                expression.push(ans);
                 display.push("Ans");
-                break;
-
-            // sin( , cos( , tan(
-            case 4 :
-                input.push(ans);
-                display.push("Ans");
-                break;
-
-            // ln( , log( , (
-            case 5 :
-                input.push(ans);
-                display.push("Ans");
-                break;
-
-            // )
-            case 6 :
-                input.push("*");
-                display.push("*");
-                input.push(ans);
-                display.push("Ans");
-                break;
-
-            // e, pi, !, %
-            case 7 :
-                input.push("*");
-                display.push("*");
-                input.push(ans);
-                display.push("Ans");
-                break;
-
-            // ^
-            case 8 :
-                input.push(ans);
-                display.push("Ans");
-                break;
-
         }
     }
 
     public void handleEqual() {
         // test if the user misses parenthesis.
         while (open > close) {
-            input.push(")");
+            expression.push(")");
             display.push(")");
             close++;
         }
-
         // if the test is passed
-
-        submit(stackToString(input));
+        submit(stackToString(expression));
     }
 
     public void submit(String inputExpression) {
@@ -1067,17 +699,15 @@ public class ButtonClickListener implements View.OnClickListener {
             ans = parse.toPlainString();
             history = stackToString(display) + " = " + ans;
             display.clear();
-            input.clear();
+            this.expression.clear();
             display.push(ans);
             if (panelHistory != null) {
                 panelHistory.setText(history);
             }
-
         } catch(Exception e) {
-            input.clear();
+            this.expression.clear();
             display.clear();
             display.push("syntax error");
         }
     }
-
 }

@@ -376,7 +376,7 @@ public class Expression {
 		private int pos = 0;
 		
 		/**
-		 * The original input expression.
+		 * The original expression expression.
 		 */
 		private String input;
 		/**
@@ -824,7 +824,7 @@ public class Expression {
 	 * 
 	 * @param st
 	 *            The string.
-	 * @return <code>true</code>, if the input string is a number.
+	 * @return <code>true</code>, if the expression string is a number.
 	 */
 	private boolean isNumber(String st) {
 		if (st.charAt(0) == minusSign && st.length() == 1)
@@ -842,7 +842,7 @@ public class Expression {
 	 * infix expression to a RPN expression.
 	 * 
 	 * @param expression
-	 *            The input expression in infx.
+	 *            The expression expression in infx.
 	 * @return A RPN representation of the expression, with each token as a list
 	 *         member.
 	 */

@@ -19,6 +19,9 @@ public class MainActivity extends Activity {
     TextView panel;
     ArrayList<Button> buttons;
 
+    Button sin, cos, tan;
+    Button deg, rad;
+
 
 
     @Override
@@ -29,9 +32,12 @@ public class MainActivity extends Activity {
         panel = (TextView) findViewById(R.id.panel);
         history = (TextView) findViewById(R.id.history);
 
-        Button sin = (Button) findViewById(R.id.buttonSin);
-        Button cos = (Button) findViewById(R.id.buttonCos);
-        Button tan = (Button) findViewById(R.id.buttonTan);
+        sin = (Button) findViewById(R.id.buttonSin);
+        cos = (Button) findViewById(R.id.buttonCos);
+        tan = (Button) findViewById(R.id.buttonTan);
+
+        deg = (Button) findViewById(R.id.buttonDegree);
+        rad = (Button) findViewById(R.id.buttonRadian);
 
         buttons = new ArrayList<Button>();
         buttons.add((Button) findViewById(R.id.button0));
@@ -66,8 +72,12 @@ public class MainActivity extends Activity {
         buttons.add((Button) findViewById(R.id.buttonExp));
         buttons.add((Button) findViewById(R.id.button2nd));
         buttons.add((Button) findViewById(R.id.buttonNega));
+        buttons.add((Button) findViewById(R.id.buttonPercentage));
+        buttons.add(deg);
+        buttons.add(rad);
 
-        ButtonClickListener listener = new ButtonClickListener(panel, history, sin, cos, tan);
+
+        ButtonClickListener listener = new ButtonClickListener(panel, history, sin, cos, tan, deg, rad);
 
         for (Button button : buttons) {
             if (button != null) {
