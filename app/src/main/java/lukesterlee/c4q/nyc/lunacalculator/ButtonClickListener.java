@@ -5,7 +5,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.Stack;
 
 /**
@@ -14,11 +18,14 @@ import java.util.Stack;
 
 public class ButtonClickListener implements View.OnClickListener {
 
+    InputStream file;
+
     TextView panelHistory;
     TextView panel;
 
     String print;
     String ans;
+    String randomMessage;
 
     lastInputType lastCode;
     int open;
@@ -38,7 +45,7 @@ public class ButtonClickListener implements View.OnClickListener {
     Stack<String> display;
     String history;
 
-    public ButtonClickListener(TextView panel, TextView panelHistory, Button sin, Button cos, Button tan, Button deg, Button rad) {
+    public ButtonClickListener(TextView panel, TextView panelHistory, Button sin, Button cos, Button tan, Button deg, Button rad, InputStream file) {
         expression = new Stack<String>();
         display = new Stack<String>();
         history = "";
@@ -52,6 +59,9 @@ public class ButtonClickListener implements View.OnClickListener {
         this.panel = panel;
         this.panelHistory = panelHistory;
 
+        this.file = file;
+
+        randomMessage = "";
         print = "";
         ans = "0";
         open = 0;
@@ -253,7 +263,11 @@ public class ButtonClickListener implements View.OnClickListener {
                 break;
 
             case R.id.buttonEqual :
-                handleEqual();
+                try {
+                    handleEqual();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
                 break;
 
         }
@@ -301,7 +315,7 @@ public class ButtonClickListener implements View.OnClickListener {
             return lastInputType.CONSTANT_UNARY;
         } else if (last.equals("^")) {
             return lastInputType.EXP;
-        } else if (last.equals("syntax error")) {
+        } else if (last.equals(randomMessage)) {
             display.clear();
             return lastInputType.EMPTY;
         }
@@ -681,18 +695,21 @@ public class ButtonClickListener implements View.OnClickListener {
         }
     }
 
-    public void handleEqual() {
+    public void handleEqual() throws FileNotFoundException {
         // test if the user misses parenthesis.
-        while (open > close) {
-            expression.push(")");
-            display.push(")");
-            close++;
+        if (!expression.empty()) {
+            while (open > close) {
+                expression.push(")");
+                display.push(")");
+                close++;
+            }
+            // if the test is passed
+            submit(stackToString(expression));
         }
-        // if the test is passed
-        submit(stackToString(expression));
+
     }
 
-    public void submit(String inputExpression) {
+    public void submit(String inputExpression) throws FileNotFoundException {
         Expression expression = new Expression(inputExpression);
         try {
             BigDecimal parse = expression.eval();
@@ -707,7 +724,19 @@ public class ButtonClickListener implements View.OnClickListener {
         } catch(Exception e) {
             this.expression.clear();
             display.clear();
-            display.push("syntax error");
+            randomMessage = randomErrorMessage();
+            display.push(randomMessage);
         }
+    }
+
+    public void setInputStream(InputStream file) {
+        this.file = file;
+    }
+
+    public String randomErrorMessage() throws FileNotFoundException {
+        ArrayList<String> lines = GetLines.readLinesFromFiles(file);
+        Random random = new Random();
+        int index = random.nextInt(lines.size());
+        return  lines.get(index);
     }
 }

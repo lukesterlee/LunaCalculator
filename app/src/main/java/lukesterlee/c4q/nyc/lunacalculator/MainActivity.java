@@ -1,106 +1,97 @@
 package lukesterlee.c4q.nyc.lunacalculator;
 
-
-import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-
-import java.util.ArrayList;
+import android.widget.Toast;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends ActionBarActivity
+        implements NavigationDrawerCallbacks {
 
-    TextView history;
-    TextView panel;
-    ArrayList<Button> buttons;
-
-    Button sin, cos, tan;
-    Button deg, rad;
-
-
+    /**
+     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
+     */
+    private NavigationDrawerFragment mNavigationDrawerFragment;
+    private Toolbar mToolbar;
+    private CharSequence mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
-        panel = (TextView) findViewById(R.id.panel);
-        history = (TextView) findViewById(R.id.history);
 
-        sin = (Button) findViewById(R.id.buttonSin);
-        cos = (Button) findViewById(R.id.buttonCos);
-        tan = (Button) findViewById(R.id.buttonTan);
+        boolean isInLandscapeMode = getResources().getBoolean(R.bool.isInLandscape);
 
-        deg = (Button) findViewById(R.id.buttonDegree);
-        rad = (Button) findViewById(R.id.buttonRadian);
-
-        buttons = new ArrayList<Button>();
-        buttons.add((Button) findViewById(R.id.button0));
-        buttons.add((Button) findViewById(R.id.button1));
-        buttons.add((Button) findViewById(R.id.button2));
-        buttons.add((Button) findViewById(R.id.button3));
-        buttons.add((Button) findViewById(R.id.button4));
-        buttons.add((Button) findViewById(R.id.button5));
-        buttons.add((Button) findViewById(R.id.button6));
-        buttons.add((Button) findViewById(R.id.button7));
-        buttons.add((Button) findViewById(R.id.button8));
-        buttons.add((Button) findViewById(R.id.button9));
-        buttons.add((Button) findViewById(R.id.buttonDot));
-        buttons.add((Button) findViewById(R.id.buttonDEL));
-        buttons.add((Button) findViewById(R.id.buttonAC));
-        buttons.add((Button) findViewById(R.id.buttonAdd));
-        buttons.add((Button) findViewById(R.id.buttonMinus));
-        buttons.add((Button) findViewById(R.id.buttonMultiple));
-        buttons.add((Button) findViewById(R.id.buttonEqual));
-        buttons.add((Button) findViewById(R.id.buttonDivided));
-        buttons.add(sin);
-        buttons.add(cos);
-        buttons.add(tan);
-        buttons.add((Button) findViewById(R.id.buttonParenthesis));
-        buttons.add((Button) findViewById(R.id.buttonE));
-        buttons.add((Button) findViewById(R.id.buttonPi));
-        buttons.add((Button) findViewById(R.id.buttonRoot));
-        buttons.add((Button) findViewById(R.id.buttonFactorial));
-        buttons.add((Button) findViewById(R.id.buttonLn));
-        buttons.add((Button) findViewById(R.id.buttonLog));
-        buttons.add((Button) findViewById(R.id.buttonAns));
-        buttons.add((Button) findViewById(R.id.buttonExp));
-        buttons.add((Button) findViewById(R.id.button2nd));
-        buttons.add((Button) findViewById(R.id.buttonNega));
-        buttons.add((Button) findViewById(R.id.buttonPercentage));
-        buttons.add(deg);
-        buttons.add(rad);
-
-
-        ButtonClickListener listener = new ButtonClickListener(panel, history, sin, cos, tan, deg, rad);
-
-        for (Button button : buttons) {
-            if (button != null) {
-                button.setOnClickListener(listener);
-            }
-
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+        setSupportActionBar(mToolbar);
+        if (isInLandscapeMode) {
+            getSupportActionBar().hide();
         }
 
+        mNavigationDrawerFragment = (NavigationDrawerFragment)
+                getFragmentManager().findFragmentById(R.id.fragment_drawer);
+
+        // Set up the drawer.
+        mNavigationDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer), mToolbar);
+    }
+
+    @Override
+    public void onNavigationDrawerItemSelected(int position) {
+        Fragment fragment = new Fragment();
+        Bundle args;
+
+        switch (position) {
+            case 0 :
+                fragment = new CalculatorFragment();
+                args = new Bundle();
+                args.putInt("position", 0);
+                fragment.setArguments(args);
+                break;
+            case 1 :
+
+                break;
+            case 2 :
+
+                break;
+            case 3 :
+
+                break;
+        }
+
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit();
+    }
 
 
-
+    @Override
+    public void onBackPressed() {
+        if (mNavigationDrawerFragment.isDrawerOpen())
+            mNavigationDrawerFragment.closeDrawer();
+        else
+            super.onBackPressed();
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+            // Only show items in the action bar relevant to this screen
+            // if the drawer is not showing. Otherwise, let the drawer
+            // decide what to show in the action bar.
+            getMenuInflater().inflate(R.menu.main, menu);
+            return true;
+        }
+        return super.onCreateOptionsMenu(menu);
     }
-
-
 
 
     @Override
@@ -118,7 +109,23 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void onSectionAttached(int number) {
 
+
+        switch (number) {
+            case 0:
+                mTitle = getString(R.string.menu0);
+                break;
+            case 1:
+                mTitle = getString(R.string.menu1);
+                break;
+            case 2:
+                mTitle = getString(R.string.menu2);
+                break;
+            case 3:
+                mTitle = getString(R.string.menu3);
+        }
+    }
 
 
 }

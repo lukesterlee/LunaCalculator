@@ -207,7 +207,7 @@ public class Expression {
 			"3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679");
 
 	/**
-	 * The {@link MathContext} to use for calculations.
+	 * The {@link java.math.MathContext} to use for calculations.
 	 */
 	private MathContext mc = MathContext.DECIMAL32;
 
@@ -274,7 +274,7 @@ public class Expression {
 
 		/**
 		 * Creates a new function with given name and parameter count.
-		 * 
+		 *
 		 * @param name
 		 *            The name of the function.
 		 * @param numParams
@@ -295,11 +295,11 @@ public class Expression {
 
 		/**
 		 * Implementation for this function.
-		 * 
+		 *
 		 * @param parameters
 		 *            Parameters will be passed by the expression evaluator as a
-		 *            {@link List} of {@link BigDecimal} values.
-		 * @return The function must return a new {@link BigDecimal} value as a
+		 *            {@link java.util.List} of {@link java.math.BigDecimal} values.
+		 * @return The function must return a new {@link java.math.BigDecimal} value as a
 		 *         computing result.
 		 */
 		public abstract BigDecimal eval(List<BigDecimal> parameters);
