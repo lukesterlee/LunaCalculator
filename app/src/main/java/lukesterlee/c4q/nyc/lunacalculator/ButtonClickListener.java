@@ -212,6 +212,19 @@ public class ButtonClickListener implements View.OnClickListener {
         panel.setText(print);
     }
 
+    private enum inputType {
+        EMPTY,
+        DIGIT,
+        DOT,
+        OPERATOR,
+        TRIG,
+        LPARENT,
+        RPARENT,
+        CONSTANT,
+        UNARY,
+        EXP,
+    }
+
     public String stackToString(Stack<String> stack) {
         String print = "";
         Object[] objects = stack.toArray();
@@ -266,19 +279,6 @@ public class ButtonClickListener implements View.OnClickListener {
             return inputType.EMPTY;
         }
         throw new Exception("did not recognize the input");
-    }
-
-    private enum inputType {
-        EMPTY,
-        DIGIT,
-        DOT,
-        OPERATOR,
-        TRIG,
-        LPARENT,
-        RPARENT,
-        CONSTANT,
-        UNARY,
-        EXP,
     }
 
     public void add(String first) {
