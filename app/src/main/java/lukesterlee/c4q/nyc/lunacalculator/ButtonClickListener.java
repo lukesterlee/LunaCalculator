@@ -33,7 +33,7 @@ public class ButtonClickListener implements View.OnClickListener {
 
     boolean is2ndOn;
     boolean isRadian;
-    boolean isRadStarted;
+
 
     Button sin;
     Button cos;
@@ -69,7 +69,7 @@ public class ButtonClickListener implements View.OnClickListener {
 
         is2ndOn = false;
         isRadian = false;
-        isRadStarted = false;
+
     }
 
     @Override
@@ -145,16 +145,16 @@ public class ButtonClickListener implements View.OnClickListener {
             case R.id.buttonSin :
                 if (is2ndOn) {
                     if (isRadian) {
-                        handleFunction("asin(deg(", "asin(", true);
-                        isRadStarted = true;
+                        handleFunction("asinrad(", "asin(", true);
+
                     } else {
                         handleFunction("asin(", "asin(", true);
                     }
                 }
                 else {
                     if (isRadian) {
-                        handleFunction("sin(deg(", "sin(", true);
-                        isRadStarted = true;
+                        handleFunction("sinrad(", "sin(", true);
+
                     } else {
                         handleFunction("sin(", "sin(", true);
                     }
@@ -163,16 +163,16 @@ public class ButtonClickListener implements View.OnClickListener {
             case R.id.buttonCos :
                 if (is2ndOn) {
                     if (isRadian) {
-                        handleFunction("acos(deg(", "acos(", true);
-                        isRadStarted = true;
+                        handleFunction("acosrad(", "acos(", true);
+
                     } else {
                         handleFunction("acos(", "acos(", true);
                     }
                 }
                 else {
                     if (isRadian) {
-                        handleFunction("cos(deg(", "cos(", true);
-                        isRadStarted = true;
+                        handleFunction("cosrad(", "cos(", true);
+
                     } else {
                         handleFunction("cos(", "cos(", true);
                     }
@@ -180,16 +180,16 @@ public class ButtonClickListener implements View.OnClickListener {
             case R.id.buttonTan :
                 if (is2ndOn) {
                     if (isRadian) {
-                        handleFunction("atan(deg(", "atan(", true);
-                        isRadStarted = true;
+                        handleFunction("atanrad(", "atan(", true);
+
                     } else {
                         handleFunction("atan(", "atan(", true);
                     }
                 }
                 else {
                     if (isRadian) {
-                        handleFunction("tan(deg(", "tan(", true);
-                        isRadStarted = true;
+                        handleFunction("tanrad(", "tan(", true);
+
                     } else {
                         handleFunction("tan(", "tan(", true);
                     }
@@ -302,6 +302,8 @@ public class ButtonClickListener implements View.OnClickListener {
         }
         String last = display.peek();
         if (Character.isDigit(last.charAt(0))) {
+            return lastInputType.DIGIT;
+        } else if (last.length() > 1 && last.startsWith("-")) {
             return lastInputType.DIGIT;
         } else if (last.equals(".")) {
             return lastInputType.DOT;
@@ -451,8 +453,7 @@ public class ButtonClickListener implements View.OnClickListener {
         switch (lastCode) {
             case DIGIT:
                 if (expression.empty())
-                    expression.push(display.peek());
-                add("*");
+                    display.pop();
                 expression.push(symbol);
                 display.push(symbolDisplay);
                 if (isParenthesis)
@@ -545,9 +546,6 @@ public class ButtonClickListener implements View.OnClickListener {
                 open++;
                 break;
             case RPARENT:
-                if (isRadian && isRadStarted) {
-                    expression.push(")");
-                }
                 if (open == close) {
                     add("*", "(");
                     open++;
@@ -570,40 +568,120 @@ public class ButtonClickListener implements View.OnClickListener {
         }
     }
 
+    public void insertBeforeLast() {
+        String last = expression.pop();
+        display.pop();
+        add("-", last);
+    }
+
+    public void insertPlusBeforeLast() {
+        String last = expression.pop();
+        display.pop();
+        add("+", last);
+    }
+
+
+    public void insertBeforeThirdToLast() {
+        String last = expression.pop();
+        String secondToLast = expression.pop();
+        String thirdToLast = expression.pop();
+        display.pop();
+        display.pop();
+        display.pop();
+        add("-");
+        add(thirdToLast, secondToLast, last);
+    }
+
+    public void replaceBeforeLast() {
+        String last = expression.pop();
+        String secondToLast = expression.pop();
+        display.pop();
+        display.pop();
+        if (secondToLast.equals("+")) {
+            add("-", last);
+        } else if (secondToLast.equals("-")) {
+            add("+", last);
+        }
+    }
+
+    public void replaceBeforeThirdToLast() {
+        String last = expression.pop();
+        String secondToLast = expression.pop();
+        String thirdToLast = expression.pop();
+        String fourthToLast = expression.pop();
+        display.pop();
+        display.pop();
+        display.pop();
+        display.pop();
+        if (fourthToLast.equals("+")) {
+            add("-");
+        } else if (fourthToLast.equals("-")) {
+            add("+");
+        }
+        add(thirdToLast, secondToLast, last);
+    }
+
     public void handleNegative() {
         String last;
         String secondLast;
         String thirdLast;
         lastCode = lastDetection();
+
         switch (lastCode) {
             case DIGIT:
                 if (expression.empty()) {
-                    expression.push("-");
-                    expression.push(display.pop());
-                    display.push("-");
-                    display.push(expression.peek());
-                } else {
-                    if (expression.size() == 1) {
+                    expression.push(display.peek());
+                }
+                int size = expression.size();
+                switch (size) {
+
+                    case 1 :
+                        if (expression.peek().contains("-")) {
+                            last = expression.pop().substring(1);
+                            expression.push(last);
+                            display.pop();
+                            display.push(last);
+                            insertPlusBeforeLast();
+                        } else {
+                            insertBeforeLast();
+                        }
+
+                        break;
+                    case 2 :
                         last = expression.pop();
-                        display.pop();
-                        add("-", last);
-                    } else {
+                        secondLast = expression.peek();
+                        expression.push(secondLast);
+                        expression.push(last);
+                        if (secondLast.equals("-")) {
+                            replaceBeforeLast();
+                        } else if (secondLast.equals("(")) {
+                            insertBeforeLast();
+                        }
+                        break;
+                    case 3:
                         last = expression.pop();
                         secondLast = expression.pop();
-                        thirdLast = expression.pop();
-                        display.pop();
-                        display.pop();
-                        display.pop();
+                        expression.push(secondLast);
+                        expression.push(last);
                         if (secondLast.equals(".")) {
-                            add("(", "-");
-                            add(thirdLast, secondLast, last);
+                            insertBeforeThirdToLast();
                         } else {
-                            add(thirdLast, secondLast);
-                            add("(", "-", last);
+                            replaceBeforeLast();
                         }
-                        open++;
-                    }
+                        break;
+                    default:
+                        last = expression.pop();
+                        secondLast = expression.pop();
+                        expression.push(secondLast);
+                        expression.push(last);
+                        if (secondLast.equals(".")) {
+                            replaceBeforeThirdToLast();
+                        } else {
+                            replaceBeforeLast();
+                        }
+
                 }
+
                 break;
             case DOT:
                 last = expression.pop();
@@ -710,19 +788,19 @@ public class ButtonClickListener implements View.OnClickListener {
     }
 
     public void submit(String inputExpression) throws FileNotFoundException {
-        Expression expression = new Expression(inputExpression);
+        Expression express = new Expression(inputExpression);
         try {
-            BigDecimal parse = expression.eval();
+            BigDecimal parse = express.eval();
             ans = parse.toPlainString();
             history = stackToString(display) + " = " + ans;
             display.clear();
-            this.expression.clear();
+            expression.clear();
             display.push(ans);
             if (panelHistory != null) {
                 panelHistory.setText(history);
             }
         } catch(Exception e) {
-            this.expression.clear();
+            expression.clear();
             display.clear();
             randomMessage = randomErrorMessage();
             display.push(randomMessage);

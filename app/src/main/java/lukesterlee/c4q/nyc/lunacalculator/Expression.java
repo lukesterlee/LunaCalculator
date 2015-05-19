@@ -646,6 +646,15 @@ public class Expression {
 				return new BigDecimal(d, mc);
 			}
 		});
+        addFunction(new Function("SINRAD", 1) {
+            @Override
+            public BigDecimal eval(List<BigDecimal> parameters) {
+                double d = Math.sin(parameters.get(0)
+                        .doubleValue());
+                return new BigDecimal(d, mc);
+            }
+        });
+
 		addFunction(new Function("COS", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
@@ -654,6 +663,16 @@ public class Expression {
 				return new BigDecimal(d, mc);
 			}
 		});
+
+        addFunction(new Function("COSRAD", 1) {
+            @Override
+            public BigDecimal eval(List<BigDecimal> parameters) {
+                double d = Math.cos(parameters.get(0)
+                        .doubleValue());
+                return new BigDecimal(d, mc);
+            }
+        });
+
 		addFunction(new Function("TAN", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
@@ -662,6 +681,15 @@ public class Expression {
 				return new BigDecimal(d, mc);
 			}
 		});
+
+        addFunction(new Function("TANRAD", 1) {
+            @Override
+            public BigDecimal eval(List<BigDecimal> parameters) {
+                double d = Math.tan(parameters.get(0)
+                        .doubleValue());
+                return new BigDecimal(d, mc);
+            }
+        });
 		addFunction(new Function("ASIN", 1) { // added by av
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
@@ -670,6 +698,16 @@ public class Expression {
 				return new BigDecimal(d, mc);
 			}
 		});
+        addFunction(new Function("ASINRAD", 1) { // added by av
+            @Override
+            public BigDecimal eval(List<BigDecimal> parameters) {
+                double d = Math.asin(parameters.get(0)
+                        .doubleValue());
+                return new BigDecimal(d, mc);
+            }
+        });
+
+
 		addFunction(new Function("ACOS", 1) { // added by av
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
@@ -678,6 +716,16 @@ public class Expression {
 				return new BigDecimal(d, mc);
 			}
 		});
+
+        addFunction(new Function("ACOSRAD", 1) { // added by av
+            @Override
+            public BigDecimal eval(List<BigDecimal> parameters) {
+                double d = Math.acos(parameters.get(0)
+                        .doubleValue());
+                return new BigDecimal(d, mc);
+            }
+        });
+
 		addFunction(new Function("ATAN", 1) { // added by av
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
@@ -686,6 +734,15 @@ public class Expression {
 				return new BigDecimal(d, mc);
 			}
 		});
+
+        addFunction(new Function("ATANRAD", 1) { // added by av
+            @Override
+            public BigDecimal eval(List<BigDecimal> parameters) {
+                double d = Math.atan(parameters.get(0)
+                        .doubleValue());
+                return new BigDecimal(d, mc);
+            }
+        });
 		addFunction(new Function("SINH", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
@@ -707,20 +764,20 @@ public class Expression {
 				return new BigDecimal(d, mc);
 			}
 		});
-		addFunction(new Function("RAD", 1) {
-			@Override
-			public BigDecimal eval(List<BigDecimal> parameters) {
-				double d = Math.toRadians(parameters.get(0).doubleValue());
-				return new BigDecimal(d, mc);
-			}
-		});
-		addFunction(new Function("DEG", 1) {
-			@Override
-			public BigDecimal eval(List<BigDecimal> parameters) {
-				double d = Math.toDegrees(parameters.get(0).doubleValue());
-				return new BigDecimal(d, mc);
-			}
-		});
+//		addFunction(new Function("RAD", 1) {
+//			@Override
+//			public BigDecimal eval(List<BigDecimal> parameters) {
+//				double d = Math.toRadians(parameters.get(0).doubleValue());
+//				return new BigDecimal(d, mc);
+//			}
+//		});
+//		addFunction(new Function("DEG", 1) {
+//			@Override
+//			public BigDecimal eval(List<BigDecimal> parameters) {
+//				double d = Math.toDegrees(parameters.get(0).doubleValue());
+//				return new BigDecimal(d, mc);
+//			}
+//		});
 		addFunction(new Function("MAX", 2) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
