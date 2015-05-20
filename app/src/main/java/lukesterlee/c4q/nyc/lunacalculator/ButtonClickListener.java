@@ -1,5 +1,6 @@
 package lukesterlee.c4q.nyc.lunacalculator;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +19,8 @@ import java.util.Stack;
 
 public class ButtonClickListener implements View.OnClickListener {
 
+    GraphCallbacks mFragment;
+
     InputStream file;
 
     TextView panelHistory;
@@ -26,35 +29,39 @@ public class ButtonClickListener implements View.OnClickListener {
     String print;
     String ans;
     String randomMessage;
+    String formula;
 
     lastInputType lastCode;
     int open;
     int close;
 
+    int countComma;
+
+    int maxX;
+    int maxY;
+
     boolean is2ndOn;
     boolean isRadian;
-
 
     Button sin;
     Button cos;
     Button tan;
     Button deg;
     Button rad;
+    Button root;
+    Button exp;
+    Button equal;
 
     Stack<String> expression;
     Stack<String> display;
     String history;
 
-    public ButtonClickListener(TextView panel, TextView panelHistory, Button sin, Button cos, Button tan, Button deg, Button rad, InputStream file) {
+    public ButtonClickListener(TextView panel, TextView panelHistory, InputStream file, GraphCallbacks mFragment) {
         expression = new Stack<String>();
         display = new Stack<String>();
         history = "";
 
-        this.sin = sin;
-        this.cos = cos;
-        this.tan = tan;
-        this.deg = deg;
-        this.rad = rad;
+        this.mFragment = mFragment;
 
         this.panel = panel;
         this.panelHistory = panelHistory;
@@ -62,10 +69,12 @@ public class ButtonClickListener implements View.OnClickListener {
         this.file = file;
 
         randomMessage = "";
+        formula = "";
         print = "";
         ans = "0";
         open = 0;
         close = 0;
+        countComma = 0;
 
         is2ndOn = false;
         isRadian = false;
@@ -135,9 +144,7 @@ public class ButtonClickListener implements View.OnClickListener {
                 handlePercentage();
                 break;
 
-            case R.id.buttonExp :
-                handleExp();
-                break;
+
             case R.id.buttonFactorial :
                 handleFactorial();
                 break;
@@ -202,9 +209,7 @@ public class ButtonClickListener implements View.OnClickListener {
             case R.id.buttonLog :
                 handleFunction("log10(", "Log(", true);
                 break;
-            case R.id.buttonRoot :
-                handleFunction("sqrt(", "√(", true);
-                break;
+
             case R.id.buttonPi :
                 handleFunction("PI", "π", false);
                 break;
@@ -224,6 +229,14 @@ public class ButtonClickListener implements View.OnClickListener {
                     sin.setTextColor(Color.parseColor("#000000"));
                     cos.setTextColor(Color.parseColor("#000000"));
                     tan.setTextColor(Color.parseColor("#000000"));
+
+                    root.setText("√");
+                    root.setBackgroundResource(R.drawable.button_lightgray);
+                    root.setTextColor(Color.parseColor("#000000"));
+
+
+
+
                 } else {
                     is2ndOn = true;
                     sin.setText("asin");
@@ -235,6 +248,11 @@ public class ButtonClickListener implements View.OnClickListener {
                     sin.setTextColor(Color.parseColor("#FFFFFF"));
                     cos.setTextColor(Color.parseColor("#FFFFFF"));
                     tan.setTextColor(Color.parseColor("#FFFFFF"));
+                    root.setText("x");
+                    root.setBackgroundResource(R.drawable.button_green2);
+                    root.setTextColor(Color.parseColor("#FFFFFF"));
+
+
                 }
                 break;
 
@@ -264,12 +282,28 @@ public class ButtonClickListener implements View.OnClickListener {
                 handleAC();
                 break;
 
+            case R.id.buttonRoot :
+                if (is2ndOn) {
+                    handleNumbers("x");
+                } else {
+                    handleFunction("sqrt(", "√(", true);
+                }
+                break;
+
+
+            case R.id.buttonExp :
+
+                handleExp();
+                break;
+
             case R.id.buttonEqual :
+
                 try {
                     handleEqual();
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
+
                 break;
 
         }
@@ -303,7 +337,7 @@ public class ButtonClickListener implements View.OnClickListener {
             return lastInputType.EMPTY;
         }
         String last = display.peek();
-        if (Character.isDigit(last.charAt(0))) {
+        if (Character.isDigit(last.charAt(0)) || last.equals("x")) {
             return lastInputType.DIGIT;
         } else if (last.length() > 1 && last.startsWith("-")) {
             return lastInputType.DIGIT;
@@ -784,7 +818,14 @@ public class ButtonClickListener implements View.OnClickListener {
                 close++;
             }
             // if the test is passed
-            submit(stackToString(expression));
+            formula = stackToString(expression);
+            if (formula.contains("x")) {
+                handleGraph();
+            } else {
+                submit(formula);
+            }
+
+
         }
 
     }
@@ -818,5 +859,33 @@ public class ButtonClickListener implements View.OnClickListener {
         Random random = new Random();
         int index = random.nextInt(lines.size());
         return  lines.get(index);
+    }
+
+    public void handleEval() {
+
+
+    }
+
+    public void handleGraph() {
+
+
+
+        expression.empty();
+        display.empty();
+        print = formula;
+
+
+        mFragment.graphButtonClicked(formula,10, 30);
+    }
+
+    public void set2nd(Button sin, Button cos, Button tan, Button deg, Button rad, Button root, Button exp, Button equal) {
+        this.sin = sin;
+        this.cos = cos;
+        this.tan = tan;
+        this.deg = deg;
+        this.rad = rad;
+        this.root = root;
+        this.exp = exp;
+        this.equal = equal;
     }
 }

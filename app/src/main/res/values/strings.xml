@@ -9,4 +9,6 @@
     <string name="menu2">Converter</string>
     <string name="menu3">Currency</string>
 
+    <color name="black">#000000</color>
+
 </resources>

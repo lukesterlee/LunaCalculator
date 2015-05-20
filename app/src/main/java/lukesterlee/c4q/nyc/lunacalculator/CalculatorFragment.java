@@ -2,6 +2,7 @@ package lukesterlee.c4q.nyc.lunacalculator;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 /**
  * Created by Luke on 5/19/2015.
  */
-public class CalculatorFragment extends Fragment{
+public class CalculatorFragment extends Fragment implements GraphCallbacks{
 
 
     TextView history;
@@ -25,6 +26,10 @@ public class CalculatorFragment extends Fragment{
 
     Button sin, cos, tan;
     Button deg, rad;
+
+    Button root;
+    Button exp;
+    Button equal;
 
 
     @Override
@@ -42,11 +47,32 @@ public class CalculatorFragment extends Fragment{
         }
 
         sin = (Button) result.findViewById(R.id.buttonSin);
+//        if (sin != null) {
+//            sin.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//
+//                    Intent intent = new Intent(getActivity(), GraphicActivity.class);
+//                    intent.putExtra("formula", panel.getText().toString());
+//                    intent.putExtra("maxX", 10);
+//                    intent.putExtra("maxY", 30);
+//                    startActivity(intent);
+//                }
+//            });
+//        }
+
+
+
         cos = (Button) result.findViewById(R.id.buttonCos);
         tan = (Button) result.findViewById(R.id.buttonTan);
 
+        root = (Button) result.findViewById(R.id.buttonRoot);
+        exp = (Button) result.findViewById(R.id.buttonExp);
+
         deg = (Button) result.findViewById(R.id.buttonDegree);
         rad = (Button) result.findViewById(R.id.buttonRadian);
+
+        equal = (Button) result.findViewById(R.id.buttonEqual);
 
         buttons = new ArrayList<Button>();
         buttons.add((Button) result.findViewById(R.id.button0));
@@ -73,27 +99,34 @@ public class CalculatorFragment extends Fragment{
         buttons.add((Button) result.findViewById(R.id.buttonParenthesis));
         buttons.add((Button) result.findViewById(R.id.buttonE));
         buttons.add((Button) result.findViewById(R.id.buttonPi));
-        buttons.add((Button) result.findViewById(R.id.buttonRoot));
         buttons.add((Button) result.findViewById(R.id.buttonFactorial));
         buttons.add((Button) result.findViewById(R.id.buttonLn));
         buttons.add((Button) result.findViewById(R.id.buttonLog));
         buttons.add((Button) result.findViewById(R.id.buttonAns));
-        buttons.add((Button) result.findViewById(R.id.buttonExp));
         buttons.add((Button) result.findViewById(R.id.button2nd));
         buttons.add((Button) result.findViewById(R.id.buttonNega));
         buttons.add((Button) result.findViewById(R.id.buttonPercentage));
         buttons.add(deg);
         buttons.add(rad);
+        buttons.add(root);
+        buttons.add(exp);
+        buttons.add(equal);
 
         InputStream file = getResources().openRawResource(R.raw.error_messages);
-        ButtonClickListener listener = new ButtonClickListener(panel, history, sin, cos, tan, deg, rad, file);
+        ButtonClickListener listener = new ButtonClickListener(panel, history, file, this);
         //listener.setInputStream(file);
+
+
+
 
         for (Button button : buttons) {
             if (button != null) {
                 button.setOnClickListener(listener);
             }
+        }
 
+        if (sin != null) {
+            listener.set2nd(sin, cos, tan, deg, rad, root, exp, equal);
         }
 
 
@@ -111,5 +144,14 @@ public class CalculatorFragment extends Fragment{
         super.onSaveInstanceState(outState);
         outState.putString("panel", panel.getText().toString());
         outState.putString("history", history.getText().toString());
+    }
+
+    @Override
+    public void graphButtonClicked(String formula, int x, int y) {
+        Intent intent = new Intent(getActivity(), GraphicActivity.class);
+        intent.putExtra("formula", formula);
+        intent.putExtra("maxX", x);
+        intent.putExtra("maxY", y);
+        startActivity(intent);
     }
 }

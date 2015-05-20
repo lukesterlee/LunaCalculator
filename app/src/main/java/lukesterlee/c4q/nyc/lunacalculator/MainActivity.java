@@ -2,6 +2,7 @@ package lukesterlee.c4q.nyc.lunacalculator;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -55,7 +56,8 @@ public class MainActivity extends ActionBarActivity
                 fragment.setArguments(args);
                 break;
             case 1 :
-
+                Intent intent = new Intent(getApplicationContext(), GraphicActivity.class);
+                startActivity(intent);
                 break;
             case 2 :
 
