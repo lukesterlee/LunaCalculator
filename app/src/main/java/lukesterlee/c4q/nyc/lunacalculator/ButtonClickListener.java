@@ -177,6 +177,7 @@ public class ButtonClickListener implements View.OnClickListener {
                         handleFunction("cos(", "cos(", true);
                     }
                 }
+                break;
             case R.id.buttonTan :
                 if (is2ndOn) {
                     if (isRadian) {
@@ -194,6 +195,7 @@ public class ButtonClickListener implements View.OnClickListener {
                         handleFunction("tan(", "tan(", true);
                     }
                 }
+                break;
             case R.id.buttonLn :
                 handleFunction("log(", "ln(", true);
                 break;
