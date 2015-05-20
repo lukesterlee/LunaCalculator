@@ -284,7 +284,7 @@ public class ButtonClickListener implements View.OnClickListener {
 
             case R.id.buttonRoot :
                 if (is2ndOn) {
-                    handleNumbers("x");
+                    handleFunction("x", "x", false);
                 } else {
                     handleFunction("sqrt(", "√(", true);
                 }
@@ -337,7 +337,7 @@ public class ButtonClickListener implements View.OnClickListener {
             return lastInputType.EMPTY;
         }
         String last = display.peek();
-        if (Character.isDigit(last.charAt(0)) || last.equals("x")) {
+        if (Character.isDigit(last.charAt(0))) {
             return lastInputType.DIGIT;
         } else if (last.length() > 1 && last.startsWith("-")) {
             return lastInputType.DIGIT;
@@ -349,7 +349,7 @@ public class ButtonClickListener implements View.OnClickListener {
             return lastInputType.LPARENT;
         } else if (last.equals(")")) {
             return lastInputType.RPARENT;
-        } else if (last.equals("e") || last.equals("π") || last.equals("!") || last.equals("%")) {
+        } else if (last.equals("e") || last.equals("π") || last.equals("!") || last.equals("%") || last.equals("x") {
             return lastInputType.CONSTANT_UNARY;
         } else if (last.equals("^")) {
             return lastInputType.EXP;
