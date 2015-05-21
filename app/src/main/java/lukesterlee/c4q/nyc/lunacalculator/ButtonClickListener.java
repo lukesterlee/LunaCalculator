@@ -349,7 +349,7 @@ public class ButtonClickListener implements View.OnClickListener {
             return lastInputType.LPARENT;
         } else if (last.equals(")")) {
             return lastInputType.RPARENT;
-        } else if (last.equals("e") || last.equals("π") || last.equals("!") || last.equals("%") || last.equals("x") {
+        } else if (last.equals("e") || last.equals("π") || last.equals("!") || last.equals("%") || last.equals("x")) {
             return lastInputType.CONSTANT_UNARY;
         } else if (last.equals("^")) {
             return lastInputType.EXP;
@@ -433,6 +433,8 @@ public class ButtonClickListener implements View.OnClickListener {
         expression.clear();
         display.clear();
         print = "";
+        panel.setText("");
+        panelHistory.setText("");
         open = 0;
         close = 0;
     }
@@ -490,6 +492,8 @@ public class ButtonClickListener implements View.OnClickListener {
             case DIGIT:
                 if (expression.empty())
                     display.pop();
+                expression.push("*");
+                display.push("*");
                 expression.push(symbol);
                 display.push(symbolDisplay);
                 if (isParenthesis)
@@ -903,10 +907,12 @@ public class ButtonClickListener implements View.OnClickListener {
 
 
 
-        expression.empty();
-        display.empty();
+        expression.clear();
+        display.clear();
         print = formula;
-
+        if (panelHistory != null) {
+            panelHistory.setText("y = " + print);
+        }
 
         mFragment.graphButtonClicked(formula,10, 30);
     }
