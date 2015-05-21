@@ -5,9 +5,8 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu0">Calculator</string>
-    <string name="menu1">Graphic</string>
-    <string name="menu2">Converter</string>
-    <string name="menu3">Currency</string>
+    <string name="menu1">Converter</string>
+
 
     <color name="black">#000000</color>
 

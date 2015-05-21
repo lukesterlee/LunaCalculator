@@ -1,15 +1,16 @@
 package lukesterlee.c4q.nyc.lunacalculator;
 
-import android.content.Intent;
+import android.content.Context;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.Stack;
 
@@ -19,9 +20,24 @@ import java.util.Stack;
 
 public class ButtonClickListener implements View.OnClickListener {
 
+
+    HashMap<String, MediaPlayer> error;
+
+    Context activity;
+
+    MediaPlayer m1;
+    MediaPlayer m2;
+    MediaPlayer m3;
+    MediaPlayer m4;
+
+    final String errorMessage1 = "seriously, bro?";
+    final String errorMessage2 = "come on~";
+    final String errorMessage3 = "u r embarrassing urself";
+    final String errorMessage4 = "hell no";
+
     GraphCallbacks mFragment;
 
-    InputStream file;
+
 
     TextView panelHistory;
     TextView panel;
@@ -55,7 +71,10 @@ public class ButtonClickListener implements View.OnClickListener {
     Stack<String> display;
     String history;
 
-    public ButtonClickListener(TextView panel, TextView panelHistory, InputStream file, GraphCallbacks mFragment, String ans) {
+    public ButtonClickListener(TextView panel, TextView panelHistory, GraphCallbacks mFragment, String ans, Context activity) {
+
+        this.activity = activity;
+
         expression = new Stack<String>();
         display = new Stack<String>();
         history = "";
@@ -64,8 +83,6 @@ public class ButtonClickListener implements View.OnClickListener {
 
         this.panel = panel;
         this.panelHistory = panelHistory;
-
-        this.file = file;
 
         randomMessage = "";
         formula = "";
@@ -80,6 +97,8 @@ public class ButtonClickListener implements View.OnClickListener {
         isRadian = false;
         isEvalon = false;
         isEvalAnsOn = false;
+
+        error = new HashMap<String, MediaPlayer>();
 
     }
 
@@ -948,26 +967,52 @@ public class ButtonClickListener implements View.OnClickListener {
                 panelHistory.setText(history);
             }
         } catch(Exception e) {
-            expression.clear();
-            display.clear();
-            open = 0;
-            close = 0;
-            try {
-                randomMessage = randomErrorMessage();
-                display.push(randomMessage);
-            } catch (Exception e2) {
-                display.push("seriously, bro?");
-            }
+            handleAC();
+                // print error here
+            randomErrorPlay();
+
 
         }
     }
 
-    public void setInputStream(InputStream file) {
-        this.file = file;
+
+    public void randomErrorPlay() {
+        ArrayList<String> lines = new ArrayList<String>();
+        lines.add(errorMessage1);
+        lines.add(errorMessage2);
+        lines.add(errorMessage3);
+        lines.add(errorMessage4);
+        Random random = new Random();
+        int index = random.nextInt(lines.size());
+
+        randomMessage = lines.get(index);
+
+        error = new HashMap<String, MediaPlayer>();
+
+        m1 = MediaPlayer.create(activity, R.raw.seriously);
+        m2 = MediaPlayer.create(activity, R.raw.come_on);
+        m3 = MediaPlayer.create(activity, R.raw.embarrassing);
+        m4 = MediaPlayer.create(activity, R.raw.hell_no);
+
+        error.put(errorMessage1, m1);
+        error.put(errorMessage2, m2);
+        error.put(errorMessage3, m3);
+        error.put(errorMessage4, m4);
+
+        display.push(randomMessage);
+
+        MediaPlayer current = null;
+        current = error.get(randomMessage);
+        current.start();
+
     }
 
     public String randomErrorMessage() throws FileNotFoundException {
-        ArrayList<String> lines = GetLines.readLinesFromFiles(file);
+        ArrayList<String> lines = new ArrayList<String>();
+        lines.add(errorMessage1);
+        lines.add(errorMessage2);
+        lines.add(errorMessage3);
+        lines.add(errorMessage4);
         Random random = new Random();
         int index = random.nextInt(lines.size());
         return  lines.get(index);
@@ -985,7 +1030,6 @@ public class ButtonClickListener implements View.OnClickListener {
         isEvalAnsOn = true;
         isEvalon = false;
 
-
         panelHistory.setText("Enter x's value");
         display.clear();
         formula = stackToString(expression);
@@ -993,13 +1037,9 @@ public class ButtonClickListener implements View.OnClickListener {
         open = 0;
         close = 0;
 
-
-
     }
 
     public void handleGraph() {
-
-
 
         expression.clear();
         display.clear();
@@ -1009,7 +1049,6 @@ public class ButtonClickListener implements View.OnClickListener {
         if (panelHistory != null) {
             panelHistory.setText("y = " + print);
         }
-
         mFragment.graphButtonClicked(formula,10, 30);
     }
 

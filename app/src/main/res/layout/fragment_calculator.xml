@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.5">
+        android:layout_weight="0.3">
 
         <TextView
             android:layout_width="match_parent"
@@ -58,7 +58,7 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/buttonAC"
-            android:background="@drawable/button_equal"
+            android:background="@drawable/button_blue"
             android:textSize="30dp"
             android:textColor="#FFFFFF"
             android:text="AC" />
@@ -90,7 +90,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@drawable/button_equal"
+            android:background="@drawable/button_blue"
             android:fontFamily="sans-serif-thin"
             android:textColor="#FFFFFF"
             android:layout_weight="1"
