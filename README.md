@@ -1,5 +1,22 @@
 # Luna Calculator
 
+#### 1. Awesome Error Handling
+
+#### 2. Auto Closing
+
+#### 3. Try 50 + 30%
+
+#### 4. 
+
+
+
+
+
+
+
+
+
+
 #### Project Date
 
 May 5th, 2015 ~ May 21st, 2015 (16 days)
