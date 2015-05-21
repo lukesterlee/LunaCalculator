@@ -111,7 +111,6 @@ public class ConvertFragment extends Fragment {
 
     };
 
-    //final InputStream file = getResources().openRawResource(R.raw.unit);
 
     AutoCompleteTextView editText;
     TextView answerPanel;
@@ -147,6 +146,7 @@ public class ConvertFragment extends Fragment {
 
         editText.setAdapter(adapter);
 
+
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -173,6 +173,7 @@ public class ConvertFragment extends Fragment {
         });
 
         send.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
 
@@ -190,6 +191,8 @@ public class ConvertFragment extends Fragment {
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment)
                         .commit();
+
+
             }
         });
 
@@ -211,10 +214,8 @@ public class ConvertFragment extends Fragment {
         Double fahrenheit;
         String result;
 
-        DecimalFormat df = new DecimalFormat("#.000");
+        DecimalFormat df = new DecimalFormat("#.00");
 
-        //Scanner input = null;
-        //input = new Scanner(file);
         String[] searchWords = new String[]{};
         searchWords = getSearchArray(search);
 
@@ -247,19 +248,6 @@ public class ConvertFragment extends Fragment {
             result = df.format(rate*amount);
             return result;
 
-//            while(input.hasNextLine()) {
-//
-//                csvWords = input.nextLine().split(",");
-//                if (csvWords[0].equals(searchWords[0]) && csvWords[1].equals(searchWords[2])) {
-//
-//                    rate = Double.parseDouble(csvWords[2]);
-//                    amount = Double.parseDouble(searchWords[3]);
-//
-//                }
-//            }
-//
-//            result = df.format(rate*amount);
-//            return result;
         }
 
 

@@ -1,28 +1,15 @@
 package lukesterlee.c4q.nyc.lunacalculator;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Point;
 import android.os.Bundle;
-import android.util.AttributeSet;
-import android.util.Xml;
-import android.view.Display;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionButton;
-
-import org.xmlpull.v1.XmlPullParser;
 
 /**
  * Created by Luke on 5/20/2015.
  */
 public class GraphicActivity extends Activity {
-
 
 
     GraphView mGraphView;
@@ -31,8 +18,7 @@ public class GraphicActivity extends Activity {
     int maxY = 30;
 
 
-    FloatingActionButton zoomOut;
-
+    AddFloatingActionButton zoomOut;
 
 
     @Override
@@ -45,7 +31,7 @@ public class GraphicActivity extends Activity {
         maxY = getIntent().getExtras().getInt("maxY");
 
 
-        zoomOut = (FloatingActionButton) findViewById(R.id.zoom_out);
+        zoomOut = (AddFloatingActionButton) findViewById(R.id.zoom_out);
         mGraphView = (GraphView) findViewById(R.id.graphView);
         mGraphView.setFormula(formula, maxX, maxY);
 

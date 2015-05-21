@@ -1,16 +1,12 @@
 package lukesterlee.c4q.nyc.lunacalculator;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -41,7 +37,7 @@ public class ButtonClickListener implements View.OnClickListener {
 
     GraphCallbacks mFragment;
 
-    InputStream file;
+
 
     TextView panelHistory;
     TextView panel;
@@ -75,7 +71,7 @@ public class ButtonClickListener implements View.OnClickListener {
     Stack<String> display;
     String history;
 
-    public ButtonClickListener(TextView panel, TextView panelHistory, InputStream file, GraphCallbacks mFragment, String ans, Context activity) {
+    public ButtonClickListener(TextView panel, TextView panelHistory, GraphCallbacks mFragment, String ans, Context activity) {
 
         this.activity = activity;
 
@@ -87,8 +83,6 @@ public class ButtonClickListener implements View.OnClickListener {
 
         this.panel = panel;
         this.panelHistory = panelHistory;
-
-        this.file = file;
 
         randomMessage = "";
         formula = "";
@@ -981,9 +975,6 @@ public class ButtonClickListener implements View.OnClickListener {
         }
     }
 
-    public void setInputStream(InputStream file) {
-        this.file = file;
-    }
 
     public void randomErrorPlay() {
         ArrayList<String> lines = new ArrayList<String>();
@@ -1008,13 +999,11 @@ public class ButtonClickListener implements View.OnClickListener {
         error.put(errorMessage3, m3);
         error.put(errorMessage4, m4);
 
-
         display.push(randomMessage);
 
         MediaPlayer current = null;
         current = error.get(randomMessage);
         current.start();
-
 
     }
 
@@ -1041,7 +1030,6 @@ public class ButtonClickListener implements View.OnClickListener {
         isEvalAnsOn = true;
         isEvalon = false;
 
-
         panelHistory.setText("Enter x's value");
         display.clear();
         formula = stackToString(expression);
@@ -1049,13 +1037,9 @@ public class ButtonClickListener implements View.OnClickListener {
         open = 0;
         close = 0;
 
-
-
     }
 
     public void handleGraph() {
-
-
 
         expression.clear();
         display.clear();
@@ -1065,7 +1049,6 @@ public class ButtonClickListener implements View.OnClickListener {
         if (panelHistory != null) {
             panelHistory.setText("y = " + print);
         }
-
         mFragment.graphButtonClicked(formula,10, 30);
     }
 

@@ -41,7 +41,7 @@
             android:textColor="#FFFFFF"
             android:fontFamily="sans-serif"
             android:layout_gravity="center"
-            android:background="@drawable/button_equal"
+            android:background="@drawable/button_blue"
             android:text="submit"
             android:id="@+id/button_submit"
             android:paddingLeft="12dp"
@@ -58,7 +58,7 @@
         android:fontFamily="sans-serif-regular"
         android:layout_marginTop="50dp"
         android:layout_gravity="center"
-        android:background="@drawable/button_equal"
+        android:background="@drawable/button_blue"
         android:text="send to calculator"
         android:id="@+id/button_send"
         android:padding="8dp" />
