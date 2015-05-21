@@ -543,13 +543,33 @@ public class ButtonClickListener implements View.OnClickListener {
                 display.push("0%");
                 break;
             case DIGIT:
-                if (expression.empty())
+                if (expression.empty()) {
                     expression.push(display.peek());
-                expression.push("*");
-                expression.push("0");
-                expression.push(".");
-                expression.push("01");
+                    expression.push("*");
+                    expression.push("0");
+                    expression.push(".");
+                    expression.push("01");
+                }
+                else if (expression.size() >= 3) {
+                    last = expression.pop();
+                    secondToLast = expression.pop();
+                    thirdToLast = expression.pop();
+
+                    if (Character.isDigit(thirdToLast.charAt(0)) && secondToLast.equals("+")) {
+                        expression.push(thirdToLast + "*(1+" + last + "*0.01)");
+
+                    } else if (Character.isDigit(thirdToLast.charAt(0)) && secondToLast.equals("-")) {
+                        expression.push(thirdToLast + "*(1-" + last + "*0.01)");
+                    }
+                } else {
+                    expression.push("*");
+                    expression.push("0");
+                    expression.push(".");
+                    expression.push("01");
+
+                }
                 display.push("%");
+
                 break;
             case RPARENT: case CONSTANT_UNARY:
                 expression.push("*");
@@ -810,8 +830,14 @@ public class ButtonClickListener implements View.OnClickListener {
     }
 
     public void handleEqual() throws FileNotFoundException {
-        // test if the user misses parenthesis.
-        if (!expression.empty()) {
+
+        lastCode = lastDetection();
+
+        // it the user didn't put anything, or end with operators, equal button is disabled.
+        if (!expression.empty() && lastCode != lastInputType.OPERATOR) {
+
+
+            // test if the user misses parenthesis.
             while (open > close) {
                 expression.push(")");
                 display.push(")");
@@ -833,8 +859,15 @@ public class ButtonClickListener implements View.OnClickListener {
     public void submit(String inputExpression) throws FileNotFoundException {
         Expression express = new Expression(inputExpression);
         try {
-            BigDecimal parse = express.eval();
-            ans = parse.toPlainString();
+            BigDecimal answer = express.eval();
+
+            // this is for sin(0), sin(180), cos(90), tan(180) because java Math.sin sucks.
+            BigDecimal sinCheck = new Expression(inputExpression + "< 0.00000000000001").eval();
+            if (sinCheck.toPlainString().equals("1")) {
+                answer = new BigDecimal("0");
+            }
+
+            ans = answer.toPlainString();
             history = stackToString(display) + " = " + ans;
             display.clear();
             expression.clear();
