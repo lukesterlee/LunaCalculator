@@ -29,8 +29,9 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
     Button sin, cos, tan;
     Button deg, rad;
 
-    Button root;
+    Button buttonAns;
     Button exp;
+    Button buttonPercentage;
     Button equal;
 
 
@@ -53,11 +54,13 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
         cos = (Button) result.findViewById(R.id.buttonCos);
         tan = (Button) result.findViewById(R.id.buttonTan);
 
-        root = (Button) result.findViewById(R.id.buttonRoot);
+        buttonAns = (Button) result.findViewById(R.id.buttonAns);
         exp = (Button) result.findViewById(R.id.buttonExp);
 
         deg = (Button) result.findViewById(R.id.buttonDegree);
         rad = (Button) result.findViewById(R.id.buttonRadian);
+
+        buttonPercentage = (Button) result.findViewById(R.id.buttonPercentage);
 
         equal = (Button) result.findViewById(R.id.buttonEqual);
 
@@ -92,11 +95,12 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
         buttons.add((Button) result.findViewById(R.id.buttonAns));
         buttons.add((Button) result.findViewById(R.id.button2nd));
         buttons.add((Button) result.findViewById(R.id.buttonNega));
-        buttons.add((Button) result.findViewById(R.id.buttonPercentage));
+
         buttons.add(deg);
         buttons.add(rad);
-        buttons.add(root);
+        buttons.add(buttonAns);
         buttons.add(exp);
+        buttons.add(buttonPercentage);
         buttons.add(equal);
 
         InputStream file = getResources().openRawResource(R.raw.error_messages);
@@ -113,7 +117,7 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
         }
 
         if (sin != null) {
-            listener.set2nd(sin, cos, tan, deg, rad, root, exp, equal);
+            listener.set2nd(sin, cos, tan, deg, rad, buttonAns, exp, buttonPercentage, equal);
         }
 
 

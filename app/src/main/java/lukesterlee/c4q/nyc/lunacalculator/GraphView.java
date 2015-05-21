@@ -60,10 +60,14 @@ public class GraphView extends SurfaceView implements Runnable {
         }
         paint.setTextSize(20);
         canvas.drawText("(0,0)", getCanvasX(canvas, 0), getCanvasY(canvas, -1), paint);
-        for (int x = -maxX; x <= maxX; x+=maxX*2/20) {
+        for (int x = -maxX; x <= maxX; x+=maxX*2/10) {
+//            BigDecimal newX = new BigDecimal(x);
+//            x = Float.parseFloat(newX.setScale(1).toString());
             canvas.drawText(x + "", getCanvasX(canvas, x), (getHeight()/2)+1, paint);
         }
-        for (int y = -maxY; y <= maxY; y+=maxY*2/20) {
+        for (int y = -maxY; y <= maxY; y+=maxY*2/10) {
+//            BigDecimal newY = new BigDecimal(y);
+//            y = Float.parseFloat(newY.setScale(1).toString());
             canvas.drawText(y + "", getWidth()/2, getCanvasY(canvas, y), paint);
         }
 
@@ -95,14 +99,14 @@ public class GraphView extends SurfaceView implements Runnable {
         }
         paint.setTextSize(20);
         canvas.drawText("(0,0)", getCanvasX(canvas, 0), getCanvasY(canvas, -1), paint);
-        for (int x = -maxX; x <= maxX; x+=maxX*2/20) {
+        for (float x = -maxX; x <= maxX; x+=maxX*2/20) {
             canvas.drawText(x + "", getCanvasX(canvas, x), (getHeight()/2)+1, paint);
         }
-        for (int y = -maxY; y <= maxY; y+=maxY*2/20) {
+        for (float y = -maxY; y <= maxY; y+=maxY*2/20) {
             canvas.drawText(y + "", getWidth()/2, getCanvasY(canvas, y), paint);
         }
 
-        for (float x = -maxX; x <= maxX; x+=0.1) {
+        for (float x = -maxX; x <= maxX; x+=0.01) {
             float y = getY(x);
             canvas.drawLine(getCanvasX(canvas, x), getCanvasY(canvas, y), getCanvasX(canvas, x+1), getCanvasY(canvas, getY(x + 1)), paint);
         }
