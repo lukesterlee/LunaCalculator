@@ -35,9 +35,6 @@ public class ButtonClickListener implements View.OnClickListener {
     int open;
     int close;
 
-    int countComma;
-
-
     boolean is2ndOn;
     boolean isRadian;
     boolean isEvalon;
@@ -76,7 +73,7 @@ public class ButtonClickListener implements View.OnClickListener {
         ans = "0";
         open = 0;
         close = 0;
-        countComma = 0;
+
 
         is2ndOn = false;
         isRadian = false;
@@ -454,6 +451,7 @@ public class ButtonClickListener implements View.OnClickListener {
         display.clear();
         print = "";
         panel.setText("");
+        ans = "";
         panelHistory.setText("");
         open = 0;
         close = 0;

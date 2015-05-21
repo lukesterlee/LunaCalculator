@@ -60,7 +60,8 @@ public class MainActivity extends ActionBarActivity
                 startActivity(intent);
                 break;
             case 2 :
-
+                Intent intent2 = new Intent(getApplicationContext(), ConverterActivity.class);
+                startActivity(intent2);
                 break;
             case 3 :
 
