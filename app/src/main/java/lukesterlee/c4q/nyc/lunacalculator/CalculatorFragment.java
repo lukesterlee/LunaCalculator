@@ -2,7 +2,9 @@ package lukesterlee.c4q.nyc.lunacalculator;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,27 +43,12 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
         panel = (TextView) result.findViewById(R.id.panel);
         history = (TextView) result.findViewById(R.id.history);
 
-        if (savedInstanceState != null) {
-            panel.setText(savedInstanceState.getString("panel"));
-            history.setText(savedInstanceState.getString("history"));
-        }
+        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        panel.setText(sharedPref.getString("panel", ""));
+        history.setText(sharedPref.getString("history", ""));
+
 
         sin = (Button) result.findViewById(R.id.buttonSin);
-//        if (sin != null) {
-//            sin.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//
-//                    Intent intent = new Intent(getActivity(), GraphicActivity.class);
-//                    intent.putExtra("formula", panel.getText().toString());
-//                    intent.putExtra("maxX", 10);
-//                    intent.putExtra("maxY", 30);
-//                    startActivity(intent);
-//                }
-//            });
-//        }
-
-
 
         cos = (Button) result.findViewById(R.id.buttonCos);
         tan = (Button) result.findViewById(R.id.buttonTan);
@@ -130,6 +117,10 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
         }
 
 
+
+
+
+
         return result;
     }
 
@@ -139,12 +130,6 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
         ((MainActivity) activity).onSectionAttached(getArguments().getInt("position"));
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("panel", panel.getText().toString());
-        outState.putString("history", history.getText().toString());
-    }
 
     @Override
     public void graphButtonClicked(String formula, int x, int y) {
@@ -153,5 +138,15 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
         intent.putExtra("maxX", x);
         intent.putExtra("maxY", y);
         startActivity(intent);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("panel", panel.getText().toString());
+        editor.putString("history", history.getText().toString());
+        editor.commit();
     }
 }
