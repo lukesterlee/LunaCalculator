@@ -24,11 +24,27 @@
         fab:fab_plusIconColor="@color/half_black"
         fab:fab_colorNormal="@color/white"
         fab:fab_colorPressed="@color/white_pressed"
+        fab:fab_size="mini"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"/>
+
+
+
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/zoom_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        fab:fab_icon="@drawable/ic_action_return_from_full_screen"
+        fab:fab_colorNormal="@color/white"
+        fab:fab_colorPressed="@color/white_pressed"
+        fab:fab_size="mini"
+        android:layout_marginLeft="16dp"
+        android:layout_above="@+id/zoom_in"
+        android:layout_alignParentEnd="true" />
 
 
 

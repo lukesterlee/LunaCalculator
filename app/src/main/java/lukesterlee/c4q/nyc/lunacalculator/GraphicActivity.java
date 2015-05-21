@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -22,7 +23,7 @@ import org.xmlpull.v1.XmlPullParser;
  */
 public class GraphicActivity extends Activity {
 
-    Canvas c;
+
 
     GraphView mGraphView;
     String formula = "x";
@@ -30,6 +31,7 @@ public class GraphicActivity extends Activity {
     int maxY = 30;
 
     AddFloatingActionButton zoomIn;
+    FloatingActionButton zoomOut;
 
 
 
@@ -43,32 +45,54 @@ public class GraphicActivity extends Activity {
         maxY = getIntent().getExtras().getInt("maxY");
 
         zoomIn = (AddFloatingActionButton) findViewById(R.id.zoom_in);
+        zoomOut = (FloatingActionButton) findViewById(R.id.zoom_out);
         mGraphView = (GraphView) findViewById(R.id.graphView);
         mGraphView.setFormula(formula, maxX, maxY);
 
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int width = size.x;
-        int height = size.y;
-
-        Bitmap b = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        c = new Canvas(b);
-
-        mGraphView.invalidate();
-        mGraphView.onDraw(c);
-
-
+//        Display display = getWindowManager().getDefaultDisplay();
+//        Point size = new Point();
+//        display.getSize(size);
+//        int width = size.x;
+//        int height = size.y;
+//
+//        Bitmap b = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+//        c = new Canvas(b);
+//
+//        mGraphView.invalidate();
+//        mGraphView.onDraw(c);
+//
+//
         zoomIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mGraphView.setFormula(formula, maxX*2, maxY*2);
-                mGraphView.invalidate();
-                mGraphView.onDraw(c);
+
+                maxX -= 1;
+                maxY -= 3;
+                mGraphView.drawAgain(maxX, maxY);
+
+            }
+        });
+
+        zoomOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                maxX += 1;
+                maxY += 3;
+                mGraphView.drawAgain(maxX, maxY);
             }
         });
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mGraphView.resume();
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mGraphView.pause();
+    }
 }
