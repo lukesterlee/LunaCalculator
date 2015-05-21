@@ -8,8 +8,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">
+        android:layout_height="0dp"
+        android:layout_margin="0dp"
+        android:padding="0dp"
+        android:layout_weight="0.5">
 
 
 
@@ -18,6 +20,7 @@
             android:layout_height="match_parent"
             android:fontFamily="sans-serif-thin"
             android:layout_margin="0dp"
+            android:padding="0dp"
             android:id="@+id/history"
             android:gravity="end"
             android:textSize="20sp" />
@@ -26,18 +29,23 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_margin="0dp"
+        android:padding="0dp"
         android:layout_weight="1">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+            android:padding="0dp"
+            android:textAlignment="center"
             android:background="@drawable/button_white"
             android:fontFamily="sans-serif-thin"
             android:id="@+id/panel"
             android:gravity="end"
-            android:layout_gravity="center_vertical"
-            android:textSize="50sp" />
+            android:textSize="40sp"
+            android:nestedScrollingEnabled="false" />
 
     </LinearLayout>
 
@@ -50,7 +58,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1">
 
         <Button
@@ -68,11 +76,13 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/button_lightgray"
-            android:fontFamily="sans-serif-thin"
             android:layout_weight="1"
-            android:id="@+id/buttonAns"
-            android:text="Ans"
+            android:fontFamily="sans-serif-thin"
+            android:id="@+id/buttonRoot"
+            android:text="√"
             android:textSize="25dp" />
+
+
 
 
         <Button
@@ -144,7 +154,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1">
 
         <Button
@@ -231,7 +241,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1">
 
         <Button
@@ -317,7 +327,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1">
 
         <Button
@@ -351,9 +361,11 @@
             android:background="@drawable/button_lightgray"
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
-            android:id="@+id/buttonPercentage"
-            android:text="%"
+            android:id="@+id/buttonExp"
+            android:text="^"
             android:textSize="25dp" />
+
+
 
         <Button
             android:layout_width="wrap_content"
@@ -403,7 +415,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1">
 
         <Button
@@ -419,26 +431,27 @@
 
 
 
-
-
         <Button
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/button_lightgray"
-            android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
-            android:id="@+id/buttonRoot"
-            android:text="√"
+            android:layout_weight="1"
+            android:id="@+id/buttonAns"
+            android:text="Ans"
             android:textSize="25dp" />
 
+
+
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/button_lightgray"
             android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
-            android:id="@+id/buttonExp"
-            android:text="^"
+            android:id="@+id/buttonPercentage"
+            android:text="%"
             android:textSize="25dp" />
 
 

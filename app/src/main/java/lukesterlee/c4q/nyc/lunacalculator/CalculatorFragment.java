@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,11 +27,13 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
     TextView panel;
     ArrayList<Button> buttons;
 
+    String ans;
     Button sin, cos, tan;
     Button deg, rad;
 
-    Button root;
+    Button buttonAns;
     Button exp;
+    Button buttonPercentage;
     Button equal;
 
 
@@ -46,6 +49,7 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         panel.setText(sharedPref.getString("panel", ""));
         history.setText(sharedPref.getString("history", ""));
+        ans = sharedPref.getString("ans", "");
 
 
         sin = (Button) result.findViewById(R.id.buttonSin);
@@ -53,11 +57,13 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
         cos = (Button) result.findViewById(R.id.buttonCos);
         tan = (Button) result.findViewById(R.id.buttonTan);
 
-        root = (Button) result.findViewById(R.id.buttonRoot);
+        buttonAns = (Button) result.findViewById(R.id.buttonAns);
         exp = (Button) result.findViewById(R.id.buttonExp);
 
         deg = (Button) result.findViewById(R.id.buttonDegree);
         rad = (Button) result.findViewById(R.id.buttonRadian);
+
+        buttonPercentage = (Button) result.findViewById(R.id.buttonPercentage);
 
         equal = (Button) result.findViewById(R.id.buttonEqual);
 
@@ -92,15 +98,16 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
         buttons.add((Button) result.findViewById(R.id.buttonAns));
         buttons.add((Button) result.findViewById(R.id.button2nd));
         buttons.add((Button) result.findViewById(R.id.buttonNega));
-        buttons.add((Button) result.findViewById(R.id.buttonPercentage));
+
         buttons.add(deg);
         buttons.add(rad);
-        buttons.add(root);
+        buttons.add(buttonAns);
         buttons.add(exp);
+        buttons.add(buttonPercentage);
         buttons.add(equal);
 
         InputStream file = getResources().openRawResource(R.raw.error_messages);
-        ButtonClickListener listener = new ButtonClickListener(panel, history, file, this);
+        ButtonClickListener listener = new ButtonClickListener(panel, history, file, this, ans);
         //listener.setInputStream(file);
 
 
@@ -113,7 +120,7 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
         }
 
         if (sin != null) {
-            listener.set2nd(sin, cos, tan, deg, rad, root, exp, equal);
+            listener.set2nd(sin, cos, tan, deg, rad, buttonAns, exp, buttonPercentage, equal);
         }
 
 
@@ -143,10 +150,12 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
     @Override
     public void onPause() {
         super.onPause();
-        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
+
+        SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("panel", panel.getText().toString());
         editor.putString("history", history.getText().toString());
+        editor.putString("ans", ans);
         editor.commit();
     }
 }

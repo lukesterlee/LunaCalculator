@@ -10,11 +10,14 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerCallbacks {
+
+
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -60,7 +63,10 @@ public class MainActivity extends ActionBarActivity
                 startActivity(intent);
                 break;
             case 2 :
-
+                fragment = new ConvertFragment();
+                args = new Bundle();
+                args.putInt("position", 2);
+                fragment.setArguments(args);
                 break;
             case 3 :
 

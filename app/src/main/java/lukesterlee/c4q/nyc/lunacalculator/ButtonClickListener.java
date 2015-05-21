@@ -35,28 +35,27 @@ public class ButtonClickListener implements View.OnClickListener {
     int open;
     int close;
 
-    int countComma;
-
-    int maxX;
-    int maxY;
-
     boolean is2ndOn;
     boolean isRadian;
+    boolean isEvalon;
+    boolean isEvalAnsOn;
 
     Button sin;
     Button cos;
     Button tan;
     Button deg;
     Button rad;
-    Button root;
+    Button buttonAns;
     Button exp;
+    Button buttonPercentage;
     Button equal;
+
 
     Stack<String> expression;
     Stack<String> display;
     String history;
 
-    public ButtonClickListener(TextView panel, TextView panelHistory, InputStream file, GraphCallbacks mFragment) {
+    public ButtonClickListener(TextView panel, TextView panelHistory, InputStream file, GraphCallbacks mFragment, String ans) {
         expression = new Stack<String>();
         display = new Stack<String>();
         history = "";
@@ -71,13 +70,16 @@ public class ButtonClickListener implements View.OnClickListener {
         randomMessage = "";
         formula = "";
         print = "";
+        this.ans = ans;
         ans = "0";
         open = 0;
         close = 0;
-        countComma = 0;
+
 
         is2ndOn = false;
         isRadian = false;
+        isEvalon = false;
+        isEvalAnsOn = false;
 
     }
 
@@ -141,7 +143,14 @@ public class ButtonClickListener implements View.OnClickListener {
                 break;
 
             case R.id.buttonPercentage :
-                handlePercentage();
+                if (isEvalon) {
+                    handleEval();
+
+
+                } else {
+                    handlePercentage();
+                }
+
                 break;
 
 
@@ -230,9 +239,9 @@ public class ButtonClickListener implements View.OnClickListener {
                     cos.setTextColor(Color.parseColor("#000000"));
                     tan.setTextColor(Color.parseColor("#000000"));
 
-                    root.setText("√");
-                    root.setBackgroundResource(R.drawable.button_lightgray);
-                    root.setTextColor(Color.parseColor("#000000"));
+                    buttonAns.setText("√");
+                    buttonAns.setBackgroundResource(R.drawable.button_lightgray);
+                    buttonAns.setTextColor(Color.parseColor("#000000"));
 
 
 
@@ -248,9 +257,9 @@ public class ButtonClickListener implements View.OnClickListener {
                     sin.setTextColor(Color.parseColor("#FFFFFF"));
                     cos.setTextColor(Color.parseColor("#FFFFFF"));
                     tan.setTextColor(Color.parseColor("#FFFFFF"));
-                    root.setText("x");
-                    root.setBackgroundResource(R.drawable.button_green2);
-                    root.setTextColor(Color.parseColor("#FFFFFF"));
+                    buttonAns.setText("x");
+                    buttonAns.setBackgroundResource(R.drawable.button_green2);
+                    buttonAns.setTextColor(Color.parseColor("#FFFFFF"));
 
 
                 }
@@ -272,7 +281,19 @@ public class ButtonClickListener implements View.OnClickListener {
                 break;
 
             case R.id.buttonAns :
-                handleAns();
+                if (is2ndOn) {
+                    handleFunction("x", "x", false);
+                    buttonPercentage.setBackgroundResource(R.drawable.button_red);
+                    buttonPercentage.setTextColor(Color.parseColor("#FFFFFF"));
+                    buttonPercentage.setText("EVAL");
+                    isEvalon = true;
+                    equal.setBackgroundResource(R.drawable.button_red);
+                    equal.setText("DRAW");
+
+                } else {
+                    handleAns();
+                }
+
                 break;
 
             case R.id.buttonDEL :
@@ -283,11 +304,8 @@ public class ButtonClickListener implements View.OnClickListener {
                 break;
 
             case R.id.buttonRoot :
-                if (is2ndOn) {
-                    handleFunction("x", "x", false);
-                } else {
-                    handleFunction("sqrt(", "√(", true);
-                }
+
+                handleFunction("sqrt(", "√(", true);
                 break;
 
 
@@ -434,9 +452,23 @@ public class ButtonClickListener implements View.OnClickListener {
         display.clear();
         print = "";
         panel.setText("");
+        ans = "";
         panelHistory.setText("");
         open = 0;
         close = 0;
+
+
+        if (buttonPercentage != null) {
+            buttonPercentage.setBackgroundResource(R.drawable.button_lightgray);
+            buttonPercentage.setTextColor(Color.parseColor("#000000"));
+            buttonPercentage.setText("%");
+            equal.setBackgroundResource(R.drawable.button_green2);
+            equal.setText("=");
+        }
+
+
+        isEvalon = false;
+        isEvalAnsOn = false;
     }
 
     public void handleDel() {
@@ -840,24 +872,58 @@ public class ButtonClickListener implements View.OnClickListener {
         // it the user didn't put anything, or end with operators, equal button is disabled.
         if (!expression.empty() && lastCode != lastInputType.OPERATOR) {
 
+            if (isEvalAnsOn) {
 
-            // test if the user misses parenthesis.
-            while (open > close) {
-                expression.push(")");
-                display.push(")");
-                close++;
-            }
-            // if the test is passed
-            formula = stackToString(expression);
-            if (formula.contains("x")) {
-                handleGraph();
+                getEvalAnswer(formula, expression.pop());
             } else {
-                submit(formula);
+                // test if the user misses parenthesis.
+                while (open > close) {
+                    expression.push(")");
+                    display.push(")");
+                    close++;
+                }
+                // if the test is passed
+                formula = stackToString(expression);
+                if (formula.contains("x")) {
+                    handleGraph();
+                } else {
+                    submit(formula);
+                }
+
+
+
             }
+
 
 
         }
 
+    }
+
+    public void getEvalAnswer(String input, String x) {
+        Expression express = new Expression(input);
+        try {
+            BigDecimal answer = express.with("x", x).eval();
+
+            String result = answer.toPlainString();
+            ans = result;
+            history = input + " = " + result;
+            display.clear();
+            expression.clear();
+            open = 0;
+            close = 0;
+            display.push(ans);
+            isEvalon = false;
+            isEvalAnsOn = false;
+            if (panelHistory != null) {
+                panelHistory.setText(history);
+            }
+        } catch(Exception e) {
+            expression.clear();
+            display.clear();
+            randomMessage = "can't evaluate";
+            display.push(randomMessage);
+        }
     }
 
     public void submit(String inputExpression) throws FileNotFoundException {
@@ -875,6 +941,8 @@ public class ButtonClickListener implements View.OnClickListener {
             history = stackToString(display) + " = " + ans;
             display.clear();
             expression.clear();
+            open = 0;
+            close = 0;
             display.push(ans);
             if (panelHistory != null) {
                 panelHistory.setText(history);
@@ -882,8 +950,15 @@ public class ButtonClickListener implements View.OnClickListener {
         } catch(Exception e) {
             expression.clear();
             display.clear();
-            randomMessage = randomErrorMessage();
-            display.push(randomMessage);
+            open = 0;
+            close = 0;
+            try {
+                randomMessage = randomErrorMessage();
+                display.push(randomMessage);
+            } catch (Exception e2) {
+                display.push("seriously, bro?");
+            }
+
         }
     }
 
@@ -900,6 +975,25 @@ public class ButtonClickListener implements View.OnClickListener {
 
     public void handleEval() {
 
+        buttonPercentage.setBackgroundResource(R.drawable.button_lightgray);
+        buttonPercentage.setTextColor(Color.parseColor("#000000"));
+        buttonPercentage.setText("%");
+
+        equal.setBackgroundResource(R.drawable.button_green2);
+        equal.setText("=");
+
+        isEvalAnsOn = true;
+        isEvalon = false;
+
+
+        panelHistory.setText("Enter x's value");
+        display.clear();
+        formula = stackToString(expression);
+        expression.clear();
+        open = 0;
+        close = 0;
+
+
 
     }
 
@@ -909,6 +1003,8 @@ public class ButtonClickListener implements View.OnClickListener {
 
         expression.clear();
         display.clear();
+        open = 0;
+        close = 0;
         print = formula;
         if (panelHistory != null) {
             panelHistory.setText("y = " + print);
@@ -917,14 +1013,15 @@ public class ButtonClickListener implements View.OnClickListener {
         mFragment.graphButtonClicked(formula,10, 30);
     }
 
-    public void set2nd(Button sin, Button cos, Button tan, Button deg, Button rad, Button root, Button exp, Button equal) {
+    public void set2nd(Button sin, Button cos, Button tan, Button deg, Button rad, Button buttonAns, Button exp, Button buttonPercentage, Button equal) {
         this.sin = sin;
         this.cos = cos;
         this.tan = tan;
         this.deg = deg;
         this.rad = rad;
-        this.root = root;
+        this.buttonAns = buttonAns;
         this.exp = exp;
+        this.buttonPercentage = buttonPercentage;
         this.equal = equal;
     }
 }

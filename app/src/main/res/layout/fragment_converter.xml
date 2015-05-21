@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+
+        android:layout_height="50dp">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:hint="e.g : 163 lbs to kg"
+            android:id="@+id/editText_converter"
+            android:layout_gravity="center_horizontal" />
+
+        </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="50dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/textView_answer"
+            android:layout_gravity="center_horizontal" />
+
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="submit"
+            android:id="@+id/button_submit"
+            android:layout_gravity="center_horizontal" />
+
+        </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="send to calculator"
+        android:id="@+id/button_send" />
+
+
+</LinearLayout>
