@@ -5,6 +5,8 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
+import android.media.browse.MediaBrowser;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -16,11 +18,13 @@ import android.widget.TextView;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Luke on 5/19/2015.
  */
 public class CalculatorFragment extends Fragment implements GraphCallbacks{
+
 
 
     TextView history;
@@ -41,6 +45,9 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View result = inflater.inflate(R.layout.fragment_calculator, container, false);
+
+
+
 
 
         panel = (TextView) result.findViewById(R.id.panel);
@@ -107,7 +114,7 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
         buttons.add(equal);
 
         InputStream file = getResources().openRawResource(R.raw.error_messages);
-        ButtonClickListener listener = new ButtonClickListener(panel, history, file, this, ans);
+        ButtonClickListener listener = new ButtonClickListener(panel, history, file, this, ans, getActivity());
         //listener.setInputStream(file);
 
 

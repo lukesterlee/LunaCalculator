@@ -31,6 +31,8 @@ public class MainActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         boolean isInLandscapeMode = getResources().getBoolean(R.bool.isInLandscape);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
