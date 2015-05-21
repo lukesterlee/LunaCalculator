@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -61,14 +62,13 @@ public class MainActivity extends ActionBarActivity
                 fragment.setArguments(args);
                 break;
             case 1 :
-                Intent intent = new Intent(getApplicationContext(), GraphicActivity.class);
-                startActivity(intent);
-                break;
-            case 2 :
                 fragment = new ConvertFragment();
                 args = new Bundle();
-                args.putInt("position", 2);
+                args.putInt("position", 1);
                 fragment.setArguments(args);
+                break;
+            case 2 :
+
                 break;
             case 3 :
 
@@ -119,6 +119,14 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
+    public void restoreActionBar() {
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle(mTitle);
+    }
+
     public void onSectionAttached(int number) {
 
 
@@ -129,11 +137,7 @@ public class MainActivity extends ActionBarActivity
             case 1:
                 mTitle = getString(R.string.menu1);
                 break;
-            case 2:
-                mTitle = getString(R.string.menu2);
-                break;
-            case 3:
-                mTitle = getString(R.string.menu3);
+
         }
     }
 

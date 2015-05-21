@@ -1,5 +1,6 @@
 package lukesterlee.c4q.nyc.lunacalculator;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
@@ -266,5 +267,11 @@ public class ConvertFragment extends Fragment {
     }
     public static String[] getSearchArray(String input) {
         return input.split(" ");
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        ((MainActivity) activity).onSectionAttached(getArguments().getInt("position"));
     }
 }
