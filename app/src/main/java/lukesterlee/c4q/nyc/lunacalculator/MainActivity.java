@@ -1,79 +1,100 @@
 package lukesterlee.c4q.nyc.lunacalculator;
 
-
-import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.Toast;
 
 
-public class MainActivity extends Activity {
-    private EditText Scr; //textbox screen
-    private float NumberBf; //save screen before press operation button
-    private String operation;
-    private ButtonClickListener btnClick;
+public class MainActivity extends ActionBarActivity
+        implements NavigationDrawerCallbacks {
 
-    
+    /**
+     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
+     */
+    private NavigationDrawerFragment mNavigationDrawerFragment;
+    private Toolbar mToolbar;
+    private CharSequence mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Scr = (EditText) findViewById(R.id.editText);
-        Scr.setEnabled(false);
 
-        int idList[]= {R.id.button0,R.id.button1,R.id.button2,R.id.button3,R.id.button4,
-                R.id.button5,R.id.button6,R.id.button7,R.id.button8,R.id.button9,
-                R.id.buttonAC,R.id.buttonDivided,R.id.buttonDot,R.id.buttonEqual,
-                R.id.buttonMinus,R.id.buttonAdd,R.id.,};
-        for (int id:idList){
-            View v = (View) findViewById(id);
+        boolean isInLandscapeMode = getResources().getBoolean(R.bool.isInLandscape);
 
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+        setSupportActionBar(mToolbar);
+        if (isInLandscapeMode) {
+            getSupportActionBar().hide();
         }
+
+        mNavigationDrawerFragment = (NavigationDrawerFragment)
+                getFragmentManager().findFragmentById(R.id.fragment_drawer);
+
+        // Set up the drawer.
+        mNavigationDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer), mToolbar);
+    }
+
+    @Override
+    public void onNavigationDrawerItemSelected(int position) {
+        Fragment fragment = new Fragment();
+        Bundle args;
+
+        switch (position) {
+            case 0 :
+                fragment = new CalculatorFragment();
+                args = new Bundle();
+                args.putInt("position", 0);
+                fragment.setArguments(args);
+                break;
+            case 1 :
+                Intent intent = new Intent(getApplicationContext(), GraphicActivity.class);
+                startActivity(intent);
+                break;
+            case 2 :
+
+                break;
+            case 3 :
+
+                break;
+        }
+
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if (mNavigationDrawerFragment.isDrawerOpen())
+            mNavigationDrawerFragment.closeDrawer();
+        else
+            super.onBackPressed();
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-    public void mMath(String str){
-        NumberBf = Float.parseFloat(Scr.getText().toString());
-        operation = str;
-        Scr.setText("0");
-    }
-
-    public void getKeyboard (String str){
-        String ScrCurrent = Scr.getText().toString();
-        if (ScrCurrent.equals("0"))
-            ScrCurrent = "";
-        ScrCurrent += str;
-        Scr.setText(ScrCurrent);
+        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+            // Only show items in the action bar relevant to this screen
+            // if the drawer is not showing. Otherwise, let the drawer
+            // decide what to show in the action bar.
+            getMenuInflater().inflate(R.menu.main, menu);
+            return true;
+        }
+        return super.onCreateOptionsMenu(menu);
     }
 
-    public void mResult(){
-        float NumAf = Float.parseFloat(Scr.getText().toString());
-        float result = 0;
-        if (operation.equals("+")){
-            result=NumAf+NumberBf;
-        }
-        if (operation.equals("-")){
-            result=NumberBf-NumAf;
-        }
-        if (operation.equals("*")){
-            result=NumAf*NumberBf;
-        }
-        if (operation.equals("/")){
-            result=NumberBf / NumAf;
-        }
-        Scr.setText(String.valueOf(result));
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -89,34 +110,24 @@ public class MainActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
-    private class ButtonClickListener implements View.OnClickListener{
-        public void onClick (View v){
-            switch (v.getId()){
-                case R.id.buttonC:
-                    Scr.setText("0");
-                    NumberBf = 0;
-                    operation = "";
-                    break;
-                case R.id.buttonPlus:
-                    mMath("+");
-                    break;
-                case R.id.buttonMinus:
-                    mMath("-");
-                    break;
-                case R.id.buttonDivide:
-                    mMath("/");
-                    break;
-                case R.id.buttonMultiply:
-                    mMath("*");
-                    break;
-                case R.id.buttonEqual:
-                    mResult();
-                    break;
-                default:
-                    String numb = ((Button) v).getText().toString();
-                    getKeyboard(numb);
-                    break;
-            }
+
+    public void onSectionAttached(int number) {
+
+
+        switch (number) {
+            case 0:
+                mTitle = getString(R.string.menu0);
+                break;
+            case 1:
+                mTitle = getString(R.string.menu1);
+                break;
+            case 2:
+                mTitle = getString(R.string.menu2);
+                break;
+            case 3:
+                mTitle = getString(R.string.menu3);
         }
     }
+
+
 }
