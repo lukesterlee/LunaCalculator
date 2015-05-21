@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.DecimalFormat;
 import java.util.Scanner;
 
 /**
@@ -12,11 +13,11 @@ import java.util.Scanner;
  */
 public class Converter {
 
-    public static Double getAnswer(InputStream file, String search) {
+    public static String getAnswer(InputStream file, String search) {
 
         Double rate = 0.0;
         Double amount = 0.0;
-
+        String answer;
 
         Scanner input = null;
         input = new Scanner(file);
@@ -32,13 +33,15 @@ public class Converter {
             //System.out.println(input.nextLine());
             csvWords = input.nextLine().split(",");
             if (csvWords[0].equals(searchWords[1]) && csvWords[1].equals(searchWords[3])) {
-                System.out.print("the answer is : ");
+
                 rate = Double.parseDouble(csvWords[2]);
                 amount = Double.parseDouble(searchWords[0]);
-                System.out.println(rate*amount);
+
             }
         }
-        return rate*amount;
+        DecimalFormat df = new DecimalFormat("#.000");
+        answer = df.format(rate*amount);
+        return answer;
     }
     public static String[] getSearchArray(String input) {
         return input.split(" ");

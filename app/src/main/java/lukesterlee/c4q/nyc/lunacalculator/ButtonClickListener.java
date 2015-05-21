@@ -55,7 +55,7 @@ public class ButtonClickListener implements View.OnClickListener {
     Stack<String> display;
     String history;
 
-    public ButtonClickListener(TextView panel, TextView panelHistory, InputStream file, GraphCallbacks mFragment) {
+    public ButtonClickListener(TextView panel, TextView panelHistory, InputStream file, GraphCallbacks mFragment, String ans) {
         expression = new Stack<String>();
         display = new Stack<String>();
         history = "";
@@ -70,6 +70,7 @@ public class ButtonClickListener implements View.OnClickListener {
         randomMessage = "";
         formula = "";
         print = "";
+        this.ans = ans;
         ans = "0";
         open = 0;
         close = 0;
@@ -951,8 +952,13 @@ public class ButtonClickListener implements View.OnClickListener {
             display.clear();
             open = 0;
             close = 0;
-            randomMessage = randomErrorMessage();
-            display.push(randomMessage);
+            try {
+                randomMessage = randomErrorMessage();
+                display.push(randomMessage);
+            } catch (Exception e2) {
+                display.push("seriously, bro?");
+            }
+
         }
     }
 
