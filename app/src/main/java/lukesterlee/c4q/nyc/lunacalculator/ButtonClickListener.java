@@ -258,7 +258,7 @@ public class ButtonClickListener implements View.OnClickListener {
                     cos.setTextColor(Color.parseColor("#000000"));
                     tan.setTextColor(Color.parseColor("#000000"));
 
-                    buttonAns.setText("√");
+                    buttonAns.setText("Ans");
                     buttonAns.setBackgroundResource(R.drawable.button_lightgray);
                     buttonAns.setTextColor(Color.parseColor("#000000"));
 
