@@ -84,6 +84,7 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
         buttons.add((Button) result.findViewById(R.id.buttonMultiple));
         buttons.add((Button) result.findViewById(R.id.buttonEqual));
         buttons.add((Button) result.findViewById(R.id.buttonDivided));
+        buttons.add((Button) result.findViewById(R.id.buttonRoot));
         buttons.add(sin);
         buttons.add(cos);
         buttons.add(tan);
