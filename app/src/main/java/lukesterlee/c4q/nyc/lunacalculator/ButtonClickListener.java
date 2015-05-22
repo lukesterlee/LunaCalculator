@@ -924,6 +924,16 @@ public class ButtonClickListener implements View.OnClickListener {
 
     }
 
+    public void allClear() {
+        expression.clear();
+        display.clear();
+        open = 0;
+        close = 0;
+        print = "";
+        history = "";
+        ans = "0";
+    }
+
     public void getEvalAnswer(String input, String x) {
         Expression express = new Expression(input);
         try {
@@ -1054,9 +1064,7 @@ public class ButtonClickListener implements View.OnClickListener {
         open = 0;
         close = 0;
         print = formula;
-        if (panelHistory != null) {
-            panelHistory.setText("y = " + print);
-        }
+        panelHistory.setText("y = " + print);
         mFragment.graphButtonClicked(formula,10, 30);
     }
 

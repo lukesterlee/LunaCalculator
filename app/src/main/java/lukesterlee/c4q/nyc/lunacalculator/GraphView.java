@@ -49,31 +49,36 @@ public class GraphView extends SurfaceView implements Runnable {
         paint = new Paint();
         paint.setColor(getResources().getColor(R.color.black));
         canvas.drawColor(Color.WHITE);
-        canvas.drawLine(canvas.getWidth()/2,0,canvas.getWidth()/2,canvas.getHeight(), paint);
+
+        // draw x axis
         canvas.drawLine(0,canvas.getHeight()/2,canvas.getWidth(),canvas.getHeight()/2, paint);
 
-        for (float x = -maxX; x <= maxX; x+=0.1) {
-            float y = getY(x);
+        // draw y axis
+        canvas.drawLine(canvas.getWidth()/2,0,canvas.getWidth()/2,canvas.getHeight(), paint);
 
-            canvas.drawLine(getCanvasX(canvas, x), getCanvasY(canvas, y), getCanvasX(canvas, x+1), getCanvasY(canvas, getY(x + 1)), paint);
-        }
         paint.setTextSize(20);
         canvas.drawText("(0,0)", getCanvasX(canvas, 0), getCanvasY(canvas, -1), paint);
+
+        // display x axis points
         for (int x = -maxX; x <= maxX; x+=maxX*2/10) {
             canvas.drawText(x + "", getCanvasX(canvas, x), (getHeight()/2)+1, paint);
         }
+
+        // display y axis points.
         for (int y = -maxY; y <= maxY; y+=maxY*2/10) {
             canvas.drawText(y + "", getWidth()/2, getCanvasY(canvas, y), paint);
         }
 
+    }
+
+    public void drawLine() {
+        // drawing the line of the formula.
         for (float x = -maxX; x <= maxX; x+=0.1) {
             float y = getY(x);
             canvas.drawLine(getCanvasX(canvas, x), getCanvasY(canvas, y), getCanvasX(canvas, x+1), getCanvasY(canvas, getY(x + 1)), paint);
         }
-
         paint.setTextSize(50);
         canvas.drawText("y = " + formula, getWidth()/4, getHeight()*9/10, paint);
-
     }
 
 
@@ -141,15 +146,14 @@ public class GraphView extends SurfaceView implements Runnable {
                 continue;
             }
             canvas = holder.lockCanvas();
+            init();
             try {
-                init();
+                drawLine();
             } catch (Exception e) {
                 paint.setTextSize(50);
                 canvas.drawText("we can't evaluate this" , getWidth()/4, getHeight()*9/10, paint);
             }
-
             holder.unlockCanvasAndPost(canvas);
-
         }
     }
 
