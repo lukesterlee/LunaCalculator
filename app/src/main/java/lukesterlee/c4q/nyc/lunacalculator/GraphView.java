@@ -77,8 +77,9 @@ public class GraphView extends SurfaceView implements Runnable {
     }
 
 
-    public void drawAgain(int maxX, int maxY) {
+    public void drawAgain(String formula, int maxX, int maxY) {
 
+        this.formula = formula;
         this.maxX = maxX;
         this.maxY = maxY;
 
@@ -140,7 +141,13 @@ public class GraphView extends SurfaceView implements Runnable {
                 continue;
             }
             canvas = holder.lockCanvas();
-            init();
+            try {
+                init();
+            } catch (Exception e) {
+                paint.setTextSize(50);
+                canvas.drawText("we can't evaluate this" , getWidth()/4, getHeight()*9/10, paint);
+            }
+
             holder.unlockCanvasAndPost(canvas);
 
         }

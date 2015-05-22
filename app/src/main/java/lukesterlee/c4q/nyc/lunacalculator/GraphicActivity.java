@@ -41,7 +41,12 @@ public class GraphicActivity extends Activity {
             public void onClick(View view) {
                 maxX += 1;
                 maxY += 3;
-                mGraphView.drawAgain(maxX, maxY);
+                try {
+                    mGraphView.drawAgain(formula, maxX, maxY);
+                } catch (Exception e) {
+                    mGraphView.drawAgain(formula, 10,30);
+                }
+
             }
         });
 

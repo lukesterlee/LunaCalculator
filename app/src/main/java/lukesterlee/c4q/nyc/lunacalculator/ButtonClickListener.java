@@ -258,7 +258,7 @@ public class ButtonClickListener implements View.OnClickListener {
                     cos.setTextColor(Color.parseColor("#000000"));
                     tan.setTextColor(Color.parseColor("#000000"));
 
-                    buttonAns.setText("√");
+                    buttonAns.setText("Ans");
                     buttonAns.setBackgroundResource(R.drawable.button_lightgray);
                     buttonAns.setTextColor(Color.parseColor("#000000"));
 
@@ -323,7 +323,6 @@ public class ButtonClickListener implements View.OnClickListener {
                 break;
 
             case R.id.buttonRoot :
-
                 handleFunction("sqrt(", "√(", true);
                 break;
 
@@ -541,9 +540,11 @@ public class ButtonClickListener implements View.OnClickListener {
         lastCode = lastDetection();
         switch (lastCode) {
             case DIGIT:
-                if (expression.empty())
-                    display.pop();
+                if (expression.empty()) {
+                    expression.push(display.pop());
+                }
                 expression.push("*");
+                display.push("Ans");
                 display.push("*");
                 expression.push(symbol);
                 display.push(symbolDisplay);
@@ -615,6 +616,10 @@ public class ButtonClickListener implements View.OnClickListener {
 
                     } else if (Character.isDigit(thirdToLast.charAt(0)) && secondToLast.equals("-")) {
                         expression.push(thirdToLast + "*(1-" + last + "*0.01)");
+                    } else if (Character.isDigit(thirdToLast.charAt(0)) && secondToLast.equals("*")) {
+                        expression.push(thirdToLast + "*" + last + "*0.01");
+                    } else if (Character.isDigit(thirdToLast.charAt(0)) && secondToLast.equals("/")) {
+                        expression.push(thirdToLast + "/" + "(" + last + "*0.01)");
                     }
                 } else {
                     expression.push("*");
@@ -827,9 +832,9 @@ public class ButtonClickListener implements View.OnClickListener {
         lastCode = lastDetection();
         switch (lastCode) {
             case EMPTY:
-                expression.push(Long.toString(factorial(Long.parseLong(ans))));
-                display.push("Ans");
-                display.push("!");
+//                expression.push(Long.toString(factorial(Long.parseLong(ans))));
+//                display.push("Ans");
+//                display.push("!");
                 break;
             case DIGIT:
                 // handle the case of 0.45
@@ -951,8 +956,11 @@ public class ButtonClickListener implements View.OnClickListener {
             BigDecimal answer = express.eval();
 
             // this is for sin(0), sin(180), cos(90), tan(180) because java Math.sin sucks.
-            BigDecimal sinCheck = new Expression(inputExpression + "< 0.00000000000001").eval();
-            if (sinCheck.toPlainString().equals("1")) {
+//            BigDecimal sinCheck = new Expression(inputExpression + "< 0.00000000000001").eval();
+//            if (sinCheck.toPlainString().equals("1")) {
+//                answer = new BigDecimal("0");
+//            }
+            if (answer.toPlainString().startsWith("0.00000000000000")) {
                 answer = new BigDecimal("0");
             }
 
