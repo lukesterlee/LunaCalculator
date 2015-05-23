@@ -107,11 +107,6 @@ public class GraphView extends SurfaceView implements Runnable {
             canvas.drawText(y + "", getWidth()/2, getCanvasY(canvas, y), paint);
         }
 
-        for (float x = -maxX; x <= maxX; x+=0.01) {
-            float y = getY(x);
-            canvas.drawLine(getCanvasX(canvas, x), getCanvasY(canvas, y), getCanvasX(canvas, x+1), getCanvasY(canvas, getY(x + 1)), paint);
-        }
-
         paint.setTextSize(50);
         canvas.drawText("y = " + formula, getWidth()/4, getHeight()*9/10, paint);
 
