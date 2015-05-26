@@ -80,11 +80,13 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/button_lightgray"
-            android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
-            android:id="@+id/buttonRoot"
-            android:text="√"
+            android:layout_weight="1"
+            android:id="@+id/buttonAns"
+            android:text="Ans"
             android:textSize="25dp" />
+
+
 
 
 
@@ -259,19 +261,22 @@
             android:capitalize="none"
             android:textSize="25dp" />
 
-
-
-
-
         <Button
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/button_lightgray"
-            android:layout_weight="1"
             android:fontFamily="sans-serif-thin"
-            android:id="@+id/buttonFactorial"
-            android:text="!"
+            android:layout_weight="1"
+            android:id="@+id/buttonLn"
+            android:text="ln"
             android:textSize="25dp" />
+
+
+
+
+
+
+
 
         <Button
             android:layout_width="wrap_content"
@@ -347,17 +352,18 @@
 
 
 
-
-
         <Button
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/button_lightgray"
-            android:fontFamily="sans-serif-thin"
             android:layout_weight="1"
-            android:id="@+id/buttonLn"
-            android:text="ln"
+            android:fontFamily="sans-serif-thin"
+            android:id="@+id/buttonRoot"
+            android:text="√"
             android:textSize="25dp" />
+
+
+
 
         <Button
             android:layout_width="wrap_content"
@@ -433,17 +439,19 @@
             android:text="2ND"
             android:textSize="25dp" />
 
-
-
         <Button
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/button_lightgray"
-            android:fontFamily="sans-serif-thin"
             android:layout_weight="1"
-            android:id="@+id/buttonAns"
-            android:text="Ans"
+            android:fontFamily="sans-serif-thin"
+            android:id="@+id/buttonFactorial"
+            android:text="!"
             android:textSize="25dp" />
+
+
+
+
 
 
 

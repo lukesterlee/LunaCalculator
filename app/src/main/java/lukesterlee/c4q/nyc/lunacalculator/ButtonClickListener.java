@@ -31,8 +31,8 @@ public class ButtonClickListener implements View.OnClickListener {
     MediaPlayer m4;
 
     final String errorMessage1 = "seriously, bro?";
-    final String errorMessage2 = "come on~";
-    final String errorMessage3 = "u r embarrassing urself";
+    final String errorMessage2 = "come on, you are better than this";
+    final String errorMessage3 = "you are embarrassing yourself";
     final String errorMessage4 = "hell no";
 
     GraphCallbacks mFragment;
@@ -53,15 +53,15 @@ public class ButtonClickListener implements View.OnClickListener {
 
     boolean is2ndOn;
     boolean isRadian;
-    boolean isEvalon;
-    boolean isEvalAnsOn;
+
+    boolean isInputXOn;
 
     Button sin;
     Button cos;
     Button tan;
     Button deg;
     Button rad;
-    Button buttonAns;
+    Button buttonFactorial;
     Button exp;
     Button buttonPercentage;
     Button equal;
@@ -95,8 +95,7 @@ public class ButtonClickListener implements View.OnClickListener {
 
         is2ndOn = false;
         isRadian = false;
-        isEvalon = false;
-        isEvalAnsOn = false;
+        isInputXOn = false;
 
         error = new HashMap<String, MediaPlayer>();
 
@@ -162,19 +161,33 @@ public class ButtonClickListener implements View.OnClickListener {
                 break;
 
             case R.id.buttonPercentage :
-                if (isEvalon) {
-                    handleEval();
-
+                if (is2ndOn) {
+                    if (isInputXOn) {
+                        add(",");
+                    } else {
+                        xInputMode("draw", "Enter a formula and x's minimum and maximum values separated by commas : ");
+                    }
 
                 } else {
                     handlePercentage();
                 }
-
                 break;
 
 
             case R.id.buttonFactorial :
-                handleFactorial();
+                if (is2ndOn) {
+                    if (isInputXOn) {
+                        handleFunction("x", "x", false);
+                    } else {
+                        xInputMode("Eval", "Enter a formula and a value separated by comma : ");
+                    }
+
+
+                } else {
+                    handleFactorial();
+
+                }
+
                 break;
 
             case R.id.buttonSin :
@@ -251,35 +264,16 @@ public class ButtonClickListener implements View.OnClickListener {
                     sin.setText("sin");
                     cos.setText("cos");
                     tan.setText("tan");
-                    sin.setBackgroundResource(R.drawable.button_lightgray);
-                    cos.setBackgroundResource(R.drawable.button_lightgray);
-                    tan.setBackgroundResource(R.drawable.button_lightgray);
-                    sin.setTextColor(Color.parseColor("#000000"));
-                    cos.setTextColor(Color.parseColor("#000000"));
-                    tan.setTextColor(Color.parseColor("#000000"));
-
-                    buttonAns.setText("Ans");
-                    buttonAns.setBackgroundResource(R.drawable.button_lightgray);
-                    buttonAns.setTextColor(Color.parseColor("#000000"));
-
-
-
+                    buttonFactorial.setText("!");
+                    buttonPercentage.setText("%");
 
                 } else {
                     is2ndOn = true;
                     sin.setText("asin");
                     cos.setText("acos");
                     tan.setText("atan");
-                    sin.setBackgroundResource(R.drawable.button_green2);
-                    cos.setBackgroundResource(R.drawable.button_green2);
-                    tan.setBackgroundResource(R.drawable.button_green2);
-                    sin.setTextColor(Color.parseColor("#FFFFFF"));
-                    cos.setTextColor(Color.parseColor("#FFFFFF"));
-                    tan.setTextColor(Color.parseColor("#FFFFFF"));
-                    buttonAns.setText("x");
-                    buttonAns.setBackgroundResource(R.drawable.button_green2);
-                    buttonAns.setTextColor(Color.parseColor("#FFFFFF"));
-
+                    buttonFactorial.setText("Eval");
+                    buttonPercentage.setText("Draw");
 
                 }
                 break;
@@ -300,26 +294,14 @@ public class ButtonClickListener implements View.OnClickListener {
                 break;
 
             case R.id.buttonAns :
-                if (is2ndOn) {
-                    handleFunction("x", "x", false);
-                    buttonPercentage.setBackgroundResource(R.drawable.button_red);
-                    buttonPercentage.setTextColor(Color.parseColor("#FFFFFF"));
-                    buttonPercentage.setText("EVAL");
-                    isEvalon = true;
-                    equal.setBackgroundResource(R.drawable.button_red);
-                    equal.setText("DRAW");
-
-                } else {
-                    handleAns();
-                }
-
+                handleAns();
                 break;
 
             case R.id.buttonDEL :
                 handleDel();
                 break;
             case R.id.buttonAC :
-                handleAC();
+                allClear();
                 break;
 
             case R.id.buttonRoot :
@@ -333,12 +315,14 @@ public class ButtonClickListener implements View.OnClickListener {
                 break;
 
             case R.id.buttonEqual :
-
-                try {
+                if (equal.getText().toString().equals("=")) {
                     handleEqual();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                } else if (equal.getText().toString().equalsIgnoreCase("eval")) {
+                    handleEval();
+                } else if (equal.getText().toString().equalsIgnoreCase("draw")) {
+                    handleGraph();
                 }
+
 
                 break;
 
@@ -465,29 +449,21 @@ public class ButtonClickListener implements View.OnClickListener {
         }
     }
 
-    public void handleAC() {
+    public void allClear() {
         expression.clear();
         display.clear();
-        print = "";
-        panel.setText("");
-        ans = "";
-        panelHistory.setText("");
         open = 0;
         close = 0;
-
-
-        if (buttonPercentage != null) {
-            buttonPercentage.setBackgroundResource(R.drawable.button_lightgray);
-            buttonPercentage.setTextColor(Color.parseColor("#000000"));
-            buttonPercentage.setText("%");
-            equal.setBackgroundResource(R.drawable.button_green2);
-            equal.setText("=");
+        print = "";
+        history = "";
+        panelHistory.setText("");
+        ans = "0";
+        if (buttonFactorial != null) {
+            clear2nd();
         }
 
-
-        isEvalon = false;
-        isEvalAnsOn = false;
     }
+
 
     public void handleDel() {
         lastCode = lastDetection();
@@ -889,78 +865,76 @@ public class ButtonClickListener implements View.OnClickListener {
         }
     }
 
-    public void handleEqual() throws FileNotFoundException {
+    public void handleEqual() {
 
         lastCode = lastDetection();
 
         // it the user didn't put anything, or end with operators, equal button is disabled.
         if (!expression.empty() && lastCode != lastInputType.OPERATOR) {
-
-            if (isEvalAnsOn) {
-
-                getEvalAnswer(formula, expression.pop());
-            } else {
-                // test if the user misses parenthesis.
-                while (open > close) {
-                    expression.push(")");
-                    display.push(")");
-                    close++;
-                }
-                // if the test is passed
-                formula = stackToString(expression);
-                if (formula.contains("x")) {
-                    handleGraph();
-                } else {
-                    submit(formula);
-                }
-
-
-
+            // test if the user misses parenthesis.
+            while (open > close) {
+                expression.push(")");
+                display.push(")");
+                close++;
             }
 
+            formula = stackToString(expression);
+            submit(formula);
 
 
         }
 
     }
 
-    public void allClear() {
-        expression.clear();
-        display.clear();
-        open = 0;
-        close = 0;
-        print = "";
-        history = "";
-        ans = "0";
-    }
 
-    public void getEvalAnswer(String input, String x) {
-        Expression express = new Expression(input);
+    public void handleEval() {
+
+        buttonFactorial.setText("!");
+        buttonFactorial.setBackgroundResource(R.drawable.button_lightgray);
+        buttonFactorial.setTextColor(Color.parseColor("#000000"));
+
+        buttonPercentage.setText("%");
+        buttonPercentage.setBackgroundResource(R.drawable.button_lightgray);
+        buttonPercentage.setTextColor(Color.parseColor("#000000"));
+
+        equal.setBackgroundResource(R.drawable.button_green2);
+        equal.setText("=");
+
+        String eval = stackToString(expression);
+        int index = eval.indexOf(",");
+        formula = eval.substring(0, index);
+        String value = eval.substring(index+1);
+
+        Expression express = new Expression(formula);
         try {
-            BigDecimal answer = express.with("x", x).eval();
+            BigDecimal answer = express.with("x", new BigDecimal(value)).eval();
 
+            allClear();
             String result = answer.toPlainString();
             ans = result;
-            history = input + " = " + result;
-            display.clear();
-            expression.clear();
-            open = 0;
-            close = 0;
+            history = formula + " = " + result;
             display.push(ans);
-            isEvalon = false;
-            isEvalAnsOn = false;
+
             if (panelHistory != null) {
                 panelHistory.setText(history);
             }
         } catch(Exception e) {
-            expression.clear();
-            display.clear();
+            allClear();
             randomMessage = "can't evaluate";
             display.push(randomMessage);
         }
+
+
+
+
+
+
+
+
+
     }
 
-    public void submit(String inputExpression) throws FileNotFoundException {
+    public void submit(String inputExpression)  {
         Expression express = new Expression(inputExpression);
         try {
             BigDecimal answer = express.eval();
@@ -985,7 +959,7 @@ public class ButtonClickListener implements View.OnClickListener {
                 panelHistory.setText(history);
             }
         } catch(Exception e) {
-            handleAC();
+            allClear();
                 // print error here
             randomErrorPlay();
 
@@ -1036,26 +1010,7 @@ public class ButtonClickListener implements View.OnClickListener {
         return  lines.get(index);
     }
 
-    public void handleEval() {
 
-        buttonPercentage.setBackgroundResource(R.drawable.button_lightgray);
-        buttonPercentage.setTextColor(Color.parseColor("#000000"));
-        buttonPercentage.setText("%");
-
-        equal.setBackgroundResource(R.drawable.button_green2);
-        equal.setText("=");
-
-        isEvalAnsOn = true;
-        isEvalon = false;
-
-        panelHistory.setText("Enter x's value");
-        display.clear();
-        formula = stackToString(expression);
-        expression.clear();
-        open = 0;
-        close = 0;
-
-    }
 
     public void handleGraph() {
 
@@ -1068,13 +1023,49 @@ public class ButtonClickListener implements View.OnClickListener {
         mFragment.graphButtonClicked(formula,10, 30);
     }
 
-    public void set2nd(Button sin, Button cos, Button tan, Button deg, Button rad, Button buttonAns, Button exp, Button buttonPercentage, Button equal) {
+    public void xInputMode(String text, String message) {
+        isInputXOn = true;
+
+        buttonFactorial.setText("x");
+        //buttonFactorial.setBackgroundResource(R.drawable.button_red);
+        //buttonFactorial.setTextColor(Color.parseColor("#FFFFFF"));
+
+        buttonPercentage.setText(",");
+        //buttonPercentage.setBackgroundResource(R.drawable.button_red);
+        //buttonPercentage.setTextColor(Color.parseColor("#FFFFFF"));
+
+        equal.setText(text);
+        equal.setBackgroundResource(R.drawable.button_red);
+        //equal.setTextColor();
+
+        panelHistory.setText(message);
+
+
+    }
+
+    public void clear2nd() {
+        is2ndOn = false;
+        isInputXOn = false;
+        sin.setText("sin");
+        cos.setText("cos");
+        tan.setText("tan");
+
+        buttonFactorial.setText("!");
+        buttonFactorial.setBackgroundResource(R.drawable.button_lightgray);
+        buttonFactorial.setTextColor(Color.parseColor("#000000"));
+
+        buttonPercentage.setText("%");
+        buttonPercentage.setBackgroundResource(R.drawable.button_lightgray);
+        buttonPercentage.setTextColor(Color.parseColor("#000000"));
+    }
+
+    public void set2nd(Button sin, Button cos, Button tan, Button deg, Button rad, Button buttonFactorial, Button exp, Button buttonPercentage, Button equal) {
         this.sin = sin;
         this.cos = cos;
         this.tan = tan;
         this.deg = deg;
         this.rad = rad;
-        this.buttonAns = buttonAns;
+        this.buttonFactorial = buttonFactorial;
         this.exp = exp;
         this.buttonPercentage = buttonPercentage;
         this.equal = equal;

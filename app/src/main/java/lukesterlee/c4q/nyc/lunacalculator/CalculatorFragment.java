@@ -30,7 +30,7 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
     Button sin, cos, tan;
     Button deg, rad;
 
-    Button buttonAns;
+    Button buttonFactorial;
     Button exp;
     Button buttonPercentage;
     Button equal;
@@ -55,7 +55,7 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
         cos = (Button) result.findViewById(R.id.buttonCos);
         tan = (Button) result.findViewById(R.id.buttonTan);
 
-        buttonAns = (Button) result.findViewById(R.id.buttonAns);
+        buttonFactorial = (Button) result.findViewById(R.id.buttonFactorial);
         exp = (Button) result.findViewById(R.id.buttonExp);
 
         deg = (Button) result.findViewById(R.id.buttonDegree);
@@ -91,7 +91,7 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
         buttons.add((Button) result.findViewById(R.id.buttonParenthesis));
         buttons.add((Button) result.findViewById(R.id.buttonE));
         buttons.add((Button) result.findViewById(R.id.buttonPi));
-        buttons.add((Button) result.findViewById(R.id.buttonFactorial));
+
         buttons.add((Button) result.findViewById(R.id.buttonLn));
         buttons.add((Button) result.findViewById(R.id.buttonLog));
         buttons.add((Button) result.findViewById(R.id.buttonAns));
@@ -100,7 +100,7 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
 
         buttons.add(deg);
         buttons.add(rad);
-        buttons.add(buttonAns);
+        buttons.add(buttonFactorial);
         buttons.add(exp);
         buttons.add(buttonPercentage);
         buttons.add(equal);
@@ -115,7 +115,7 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
         }
 
         if (sin != null) {
-            listener.set2nd(sin, cos, tan, deg, rad, buttonAns, exp, buttonPercentage, equal);
+            listener.set2nd(sin, cos, tan, deg, rad, buttonFactorial, exp, buttonPercentage, equal);
         }
 
         return result;
