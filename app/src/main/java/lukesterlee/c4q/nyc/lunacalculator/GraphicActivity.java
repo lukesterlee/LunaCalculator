@@ -14,8 +14,8 @@ public class GraphicActivity extends Activity {
 
     GraphView mGraphView;
     String formula = "x";
-    int maxX = 10;
-    int maxY = 30;
+    int minX = 10;
+    int maxX = 30;
 
 
     AddFloatingActionButton zoomOut;
@@ -27,28 +27,28 @@ public class GraphicActivity extends Activity {
         setContentView(R.layout.activity_graphic);
 
         formula = getIntent().getExtras().getString("formula");
+        minX = getIntent().getExtras().getInt("minX");
         maxX = getIntent().getExtras().getInt("maxX");
-        maxY = getIntent().getExtras().getInt("maxY");
 
 
         zoomOut = (AddFloatingActionButton) findViewById(R.id.zoom_out);
         mGraphView = (GraphView) findViewById(R.id.graphView);
-        mGraphView.setFormula(formula, maxX, maxY);
+        mGraphView.setFormula(formula, minX, maxX);
 
 
-        zoomOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                maxX += 1;
-                maxY += 3;
-                try {
-                    mGraphView.drawAgain(formula, maxX, maxY);
-                } catch (Exception e) {
-                    mGraphView.drawAgain(formula, 10,30);
-                }
-
-            }
-        });
+//        zoomOut.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                maxX += 1;
+//                maxY += 3;
+//                try {
+//                    mGraphView.drawAgain(formula, maxX, maxY);
+//                } catch (Exception e) {
+//                    mGraphView.drawAgain(formula, 10,30);
+//                }
+//
+//            }
+//        });
 
     }
 

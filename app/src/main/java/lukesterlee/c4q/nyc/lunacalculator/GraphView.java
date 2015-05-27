@@ -23,8 +23,11 @@ public class GraphView extends SurfaceView implements Runnable {
     Paint paint;
 
     String formula = "x";
-    int maxX = 10;
-    int maxY = 30;
+    int minX = 10;
+    int maxX = 30;
+
+    int rangeX = 10;
+    int rangeY = 30;
 
     public GraphView(Context context) {
         super(context);
@@ -36,11 +39,13 @@ public class GraphView extends SurfaceView implements Runnable {
         holder = getHolder();
     }
 
-    public void setFormula(String formula, int maxX, int maxY) {
+    public void setFormula(String formula, int minX, int maxX) {
 
         this.formula = formula;
+        this.minX = minX;
         this.maxX = maxX;
-        this.maxY = maxY;
+
+        rangeX = Math.max(Math.abs(minX), Math.abs(maxX));
 
     }
 
@@ -60,12 +65,12 @@ public class GraphView extends SurfaceView implements Runnable {
         canvas.drawText("(0,0)", getCanvasX(canvas, 0), getCanvasY(canvas, -1), paint);
 
         // display x axis points
-        for (int x = -maxX; x <= maxX; x+=maxX*2/10) {
+        for (int x = -rangeX; x <= rangeX; x+=rangeX*2/10) {
             canvas.drawText(x + "", getCanvasX(canvas, x), (getHeight()/2)+1, paint);
         }
 
         // display y axis points.
-        for (int y = -maxY; y <= maxY; y+=maxY*2/10) {
+        for (int y = -rangeY; y <= rangeY; y+=rangeY*2/10) {
             canvas.drawText(y + "", getWidth()/2, getCanvasY(canvas, y), paint);
         }
 
@@ -73,7 +78,7 @@ public class GraphView extends SurfaceView implements Runnable {
 
     public void drawLine() {
         // drawing the line of the formula.
-        for (float x = -maxX; x <= maxX; x+=0.1) {
+        for (float x = minX; x <= maxX; x+=0.1) {
             float y = getY(x);
             canvas.drawLine(getCanvasX(canvas, x), getCanvasY(canvas, y), getCanvasX(canvas, x+1), getCanvasY(canvas, getY(x + 1)), paint);
         }
@@ -82,35 +87,35 @@ public class GraphView extends SurfaceView implements Runnable {
     }
 
 
-    public void drawAgain(String formula, int maxX, int maxY) {
-
-        this.formula = formula;
-        this.maxX = maxX;
-        this.maxY = maxY;
-
-        paint = new Paint();
-        paint.setColor(getResources().getColor(R.color.black));
-        canvas.drawColor(Color.WHITE);
-        canvas.drawLine(canvas.getWidth()/2,0,canvas.getWidth()/2,canvas.getHeight(), paint);
-        canvas.drawLine(0,canvas.getHeight()/2,canvas.getWidth(),canvas.getHeight()/2, paint);
-
-        for (float x = -maxX; x <= maxX; x+=0.1) {
-            float y = getY(x);
-            canvas.drawLine(getCanvasX(canvas, x), getCanvasY(canvas, y), getCanvasX(canvas, x+1), getCanvasY(canvas, getY(x + 1)), paint);
-        }
-        paint.setTextSize(20);
-        canvas.drawText("(0,0)", getCanvasX(canvas, 0), getCanvasY(canvas, -1), paint);
-        for (float x = -maxX; x <= maxX; x+=maxX*2/20) {
-            canvas.drawText(x + "", getCanvasX(canvas, x), (getHeight()/2)+1, paint);
-        }
-        for (float y = -maxY; y <= maxY; y+=maxY*2/20) {
-            canvas.drawText(y + "", getWidth()/2, getCanvasY(canvas, y), paint);
-        }
-
-        paint.setTextSize(50);
-        canvas.drawText("y = " + formula, getWidth()/4, getHeight()*9/10, paint);
-
-    }
+//    public void drawAgain(String formula, int maxX, int maxY) {
+//
+//        this.formula = formula;
+//        this.maxX = maxX;
+//        this.maxY = maxY;
+//
+//        paint = new Paint();
+//        paint.setColor(getResources().getColor(R.color.black));
+//        canvas.drawColor(Color.WHITE);
+//        canvas.drawLine(canvas.getWidth()/2,0,canvas.getWidth()/2,canvas.getHeight(), paint);
+//        canvas.drawLine(0,canvas.getHeight()/2,canvas.getWidth(),canvas.getHeight()/2, paint);
+//
+//        for (float x = -maxX; x <= maxX; x+=0.1) {
+//            float y = getY(x);
+//            canvas.drawLine(getCanvasX(canvas, x), getCanvasY(canvas, y), getCanvasX(canvas, x+1), getCanvasY(canvas, getY(x + 1)), paint);
+//        }
+//        paint.setTextSize(20);
+//        canvas.drawText("(0,0)", getCanvasX(canvas, 0), getCanvasY(canvas, -1), paint);
+//        for (float x = -maxX; x <= maxX; x+=maxX*2/20) {
+//            canvas.drawText(x + "", getCanvasX(canvas, x), (getHeight()/2)+1, paint);
+//        }
+//        for (float y = -maxY; y <= maxY; y+=maxY*2/20) {
+//            canvas.drawText(y + "", getWidth()/2, getCanvasY(canvas, y), paint);
+//        }
+//
+//        paint.setTextSize(50);
+//        canvas.drawText("y = " + formula, getWidth()/4, getHeight()*9/10, paint);
+//
+//    }
 
     public float getY(float x) {
 
@@ -122,12 +127,12 @@ public class GraphView extends SurfaceView implements Runnable {
     }
 
     public float getCanvasX(Canvas canvas, float x) {
-        float scale = canvas.getWidth()/(maxX*2);
+        float scale = canvas.getWidth()/(rangeX*2);
         return x*scale + (canvas.getWidth()/2);
     }
 
     public float getCanvasY(Canvas canvas, float y) {
-        float scale = canvas.getHeight()/(maxY*2);
+        float scale = canvas.getHeight()/(rangeY*2);
         return -y*scale + (canvas.getHeight()/2);
     }
 

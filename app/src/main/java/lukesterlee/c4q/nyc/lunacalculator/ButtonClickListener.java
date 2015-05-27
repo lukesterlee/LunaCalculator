@@ -272,8 +272,14 @@ public class ButtonClickListener implements View.OnClickListener {
                     sin.setText("asin");
                     cos.setText("acos");
                     tan.setText("atan");
-                    buttonFactorial.setText("Eval");
-                    buttonPercentage.setText("Draw");
+                    if (isInputXOn) {
+                        buttonFactorial.setText("x");
+                        buttonPercentage.setText(",");
+                    } else {
+                        buttonFactorial.setText("Eval");
+                        buttonPercentage.setText("Draw");
+                    }
+
 
                 }
                 break;
@@ -461,6 +467,9 @@ public class ButtonClickListener implements View.OnClickListener {
         if (buttonFactorial != null) {
             clear2nd();
         }
+
+        equal.setBackgroundResource(R.drawable.button_green2);
+        equal.setText("=");
 
     }
 
@@ -900,6 +909,8 @@ public class ButtonClickListener implements View.OnClickListener {
         equal.setBackgroundResource(R.drawable.button_green2);
         equal.setText("=");
 
+        isInputXOn = false;
+
         String eval = stackToString(expression);
         int index = eval.indexOf(",");
         formula = eval.substring(0, index);
@@ -1011,16 +1022,26 @@ public class ButtonClickListener implements View.OnClickListener {
     }
 
 
-
     public void handleGraph() {
 
-        expression.clear();
-        display.clear();
-        open = 0;
-        close = 0;
+
+        String[] line = stackToString(expression).split(",");
+        
+        formula = line[0];
+        int min = Integer.parseInt(line[1]);
+        int max = Integer.parseInt(line[2]);
+
+
+
+        allClear();
         print = formula;
         panelHistory.setText("y = " + print);
-        mFragment.graphButtonClicked(formula,10, 30);
+        mFragment.graphButtonClicked(formula, min, max);
+
+        equal.setBackgroundResource(R.drawable.button_green2);
+        equal.setText("=");
+
+        isInputXOn = false;
     }
 
     public void xInputMode(String text, String message) {

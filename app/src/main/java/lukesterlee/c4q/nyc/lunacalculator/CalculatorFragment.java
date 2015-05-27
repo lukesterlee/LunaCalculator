@@ -132,8 +132,8 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
     public void graphButtonClicked(String formula, int x, int y) {
         Intent intent = new Intent(getActivity(), GraphicActivity.class);
         intent.putExtra("formula", formula);
-        intent.putExtra("maxX", x);
-        intent.putExtra("maxY", y);
+        intent.putExtra("minX", x);
+        intent.putExtra("maxX", y);
         startActivity(intent);
     }
 
