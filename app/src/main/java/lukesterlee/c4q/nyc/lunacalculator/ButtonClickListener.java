@@ -526,10 +526,10 @@ public class ButtonClickListener implements View.OnClickListener {
         switch (lastCode) {
             case DIGIT:
                 if (expression.empty()) {
-                    expression.push(display.pop());
+                    expression.push(display.peek());
                 }
                 expression.push("*");
-                display.push("Ans");
+                //display.push("Ans");
                 display.push("*");
                 expression.push(symbol);
                 display.push(symbolDisplay);
@@ -1080,7 +1080,7 @@ public class ButtonClickListener implements View.OnClickListener {
         buttonPercentage.setTextColor(Color.parseColor("#000000"));
     }
 
-    public void set2nd(Button sin, Button cos, Button tan, Button deg, Button rad, Button buttonFactorial, Button exp, Button buttonPercentage, Button equal) {
+    public void set2nd(Button sin, Button cos, Button tan, Button deg, Button rad, Button buttonFactorial, Button exp, Button buttonPercentage) {
         this.sin = sin;
         this.cos = cos;
         this.tan = tan;
@@ -1089,6 +1089,10 @@ public class ButtonClickListener implements View.OnClickListener {
         this.buttonFactorial = buttonFactorial;
         this.exp = exp;
         this.buttonPercentage = buttonPercentage;
+
+    }
+
+    public void setEqual(Button equal) {
         this.equal = equal;
     }
 }

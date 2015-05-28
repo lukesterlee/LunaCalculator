@@ -82,7 +82,7 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
         buttons.add((Button) result.findViewById(R.id.buttonAdd));
         buttons.add((Button) result.findViewById(R.id.buttonMinus));
         buttons.add((Button) result.findViewById(R.id.buttonMultiple));
-        buttons.add((Button) result.findViewById(R.id.buttonEqual));
+        //buttons.add((Button) result.findViewById(R.id.buttonEqual));
         buttons.add((Button) result.findViewById(R.id.buttonDivided));
         buttons.add((Button) result.findViewById(R.id.buttonRoot));
         buttons.add(sin);
@@ -114,8 +114,10 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
             }
         }
 
+        listener.setEqual(equal);
+
         if (sin != null) {
-            listener.set2nd(sin, cos, tan, deg, rad, buttonFactorial, exp, buttonPercentage, equal);
+            listener.set2nd(sin, cos, tan, deg, rad, buttonFactorial, exp, buttonPercentage);
         }
 
         return result;

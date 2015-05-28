@@ -27,7 +27,7 @@ public class GraphView extends SurfaceView implements Runnable {
     int maxX = 30;
 
     int rangeX = 10;
-    int rangeY = 30;
+    int rangeY = 10;
 
     public GraphView(Context context) {
         super(context);
@@ -46,6 +46,7 @@ public class GraphView extends SurfaceView implements Runnable {
         this.maxX = maxX;
 
         rangeX = Math.max(Math.abs(minX), Math.abs(maxX));
+        rangeY = rangeX;
 
     }
 
