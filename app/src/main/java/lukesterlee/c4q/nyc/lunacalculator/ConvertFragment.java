@@ -15,6 +15,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
@@ -112,7 +114,7 @@ public class ConvertFragment extends Fragment {
     };
 
 
-    AutoCompleteTextView editText;
+    AutoCompleteTextView autoCompleteTextView;
     TextView answerPanel;
     Button submit;
     Button send;
@@ -134,7 +136,7 @@ public class ConvertFragment extends Fragment {
 
 
 
-        editText = (AutoCompleteTextView) result.findViewById(R.id.editText_converter);
+        autoCompleteTextView = (AutoCompleteTextView) result.findViewById(R.id.autocomplete_units);
         answerPanel = (TextView) result.findViewById(R.id.textView_answer);
         submit = (Button) result.findViewById(R.id.button_submit);
         send = (Button) result.findViewById(R.id.button_send);
@@ -142,31 +144,51 @@ public class ConvertFragment extends Fragment {
         ArrayList<String> list = new ArrayList<String>(Arrays.asList(SUGGESTIONS));
 
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, list) {
+            @Override
+            public Filter getFilter() {
+                Filter myFilter = new Filter() {
+                    @Override
+                    protected FilterResults performFiltering(CharSequence constraint) {
+                        FilterResults filterResults = new FilterResults();
 
-        editText.setAdapter(adapter);
+                        return filterResults;
+                    }
+
+
+                    @Override
+                    protected void publishResults(CharSequence constraint, FilterResults results) {
+
+                    }
+                };
+
+
+                return myFilter;
+            }
+        };
+
+        autoCompleteTextView.setAdapter(adapter);
 
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                search = editText.getText().toString();
+                search = autoCompleteTextView.getText().toString();
                 answer = getAnswer();
                 answerPanel.setText(answer);
             }
         });
 
-        editText.setOnEditorActionListener(new AutoCompleteTextView.OnEditorActionListener() {
+        autoCompleteTextView.setOnEditorActionListener(new AutoCompleteTextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if ( (actionId == EditorInfo.IME_ACTION_DONE) || ((keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (keyEvent.getAction() == KeyEvent.ACTION_DOWN ))){
-                    search = editText.getText().toString();
+                if ((actionId == EditorInfo.IME_ACTION_DONE) || ((keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (keyEvent.getAction() == KeyEvent.ACTION_DOWN))) {
+                    search = autoCompleteTextView.getText().toString();
 
                     answer = getAnswer();
                     answerPanel.setText(answer);
                     return true;
-                }
-                else{
+                } else {
                     return false;
                 }
             }

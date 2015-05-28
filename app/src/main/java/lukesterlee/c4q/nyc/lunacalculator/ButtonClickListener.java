@@ -346,6 +346,7 @@ public class ButtonClickListener implements View.OnClickListener {
         RPARENT,
         CONSTANT_UNARY,
         EXP,
+        COMMA,
         ERROR
     }
 
@@ -379,6 +380,8 @@ public class ButtonClickListener implements View.OnClickListener {
             return lastInputType.CONSTANT_UNARY;
         } else if (last.equals("^")) {
             return lastInputType.EXP;
+        } else if (last.equals(",")) {
+            return lastInputType.COMMA;
         } else if (last.equals(randomMessage)) {
             display.clear();
             return lastInputType.EMPTY;
@@ -795,7 +798,7 @@ public class ButtonClickListener implements View.OnClickListener {
                 add("(", "-");
                 open++;
                 break;
-            case LPARENT: case EMPTY:
+            case LPARENT: case EMPTY: case COMMA:
                 add("-");
                 break;
             case RPARENT: case CONSTANT_UNARY:
