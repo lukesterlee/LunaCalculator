@@ -85,6 +85,9 @@ public class SuggestionAdapter extends BaseAdapter implements Filterable {
         Filter myFilter = new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
+                if (constraint.toString().contains(" ")) {
+                    constraint = constraint.toString().substring(constraint.toString().indexOf(" ")+1);
+                }
                 return null;
             }
 
