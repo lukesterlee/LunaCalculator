@@ -11,8 +11,9 @@ import android.widget.Filterable;
 /**
  * Created by Luke on 5/28/2015.
  */
-public class SuggestionAdapter extends ArrayAdapter<String> implements Filterable {
+public class SuggestionAdapter extends BaseAdapter implements Filterable {
 
+    // TODO: move this to strings.xml
     final String[] SUGGESTIONS = new String[]{
             "kg to lbs ",
             "lbs to kg ",
@@ -55,14 +56,42 @@ public class SuggestionAdapter extends ArrayAdapter<String> implements Filterabl
     };
 
 
-    public SuggestionAdapter(Context context, int resource) {
-        super(context, resource);
+
+
+
+    @Override
+    public int getCount() {
+        return 0;
     }
 
     @Override
+    public Object getItem(int position) {
+        return null;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        return null;
+    }
+
+
+    @Override
     public Filter getFilter() {
-        return super.getFilter();
+        Filter myFilter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                return null;
+            }
 
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
 
+            }
+        }
     }
 }

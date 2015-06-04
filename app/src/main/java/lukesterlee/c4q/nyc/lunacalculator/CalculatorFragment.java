@@ -18,6 +18,8 @@ import java.util.ArrayList;
 /**
  * Created by Luke on 5/19/2015.
  */
+
+// TODO: change this to activity
 public class CalculatorFragment extends Fragment implements GraphCallbacks{
 
 

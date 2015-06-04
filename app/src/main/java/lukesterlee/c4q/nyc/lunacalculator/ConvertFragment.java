@@ -27,10 +27,12 @@ import java.util.List;
 /**
  * Created by Luke on 5/21/2015.
  */
+
+// TODO: change this to activity.
 public class ConvertFragment extends Fragment {
 
 
-
+    // TODO: move this to strings.xml
     final String[] SUGGESTIONS = new String[]{
             "kg to lbs ",
             "lbs to kg ",
@@ -145,28 +147,8 @@ public class ConvertFragment extends Fragment {
         ArrayList<String> list = new ArrayList<String>(Arrays.asList(SUGGESTIONS));
 
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, list) {
-            @Override
-            public Filter getFilter() {
-                Filter myFilter = new Filter() {
-
-                    @Override
-                    protected FilterResults performFiltering(CharSequence constraint) {
-                        constraint = constraint.toString().substring(constraint.toString().indexOf(" "));
-                        return performFiltering(constraint);
-                    }
-
-                    @Override
-                    protected void publishResults(CharSequence constraint, FilterResults results) {
-
-                    }
-                };
-
-
-                return myFilter;
-            }
-        };
-
+        // TODO: create a new custom adapter.
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, list);
         autoCompleteTextView.setAdapter(adapter);
 
 
