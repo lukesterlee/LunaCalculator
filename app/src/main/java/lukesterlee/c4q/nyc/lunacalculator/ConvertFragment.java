@@ -22,6 +22,7 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Luke on 5/21/2015.
@@ -148,13 +149,12 @@ public class ConvertFragment extends Fragment {
             @Override
             public Filter getFilter() {
                 Filter myFilter = new Filter() {
+
                     @Override
                     protected FilterResults performFiltering(CharSequence constraint) {
-                        FilterResults filterResults = new FilterResults();
-
-                        return filterResults;
+                        constraint = constraint.toString().substring(constraint.toString().indexOf(" "));
+                        return performFiltering(constraint);
                     }
-
 
                     @Override
                     protected void publishResults(CharSequence constraint, FilterResults results) {
@@ -213,9 +213,6 @@ public class ConvertFragment extends Fragment {
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment)
                         .commit();
-
-
-                
 
 
             }

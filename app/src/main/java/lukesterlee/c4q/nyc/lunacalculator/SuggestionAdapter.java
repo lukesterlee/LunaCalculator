@@ -1,7 +1,9 @@
 package lukesterlee.c4q.nyc.lunacalculator;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -9,7 +11,7 @@ import android.widget.Filterable;
 /**
  * Created by Luke on 5/28/2015.
  */
-public class SuggestionAdapter extends BaseAdapter implements Filterable {
+public class SuggestionAdapter extends ArrayAdapter<String> implements Filterable {
 
     final String[] SUGGESTIONS = new String[]{
             "kg to lbs ",
@@ -52,28 +54,15 @@ public class SuggestionAdapter extends BaseAdapter implements Filterable {
 
     };
 
-    @Override
-    public int getCount() {
-        return SUGGESTIONS.length;
-    }
 
-    @Override
-    public Object getItem(int i) {
-        return null;
-    }
-
-    @Override
-    public long getItemId(int i) {
-        return 0;
-    }
-
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        return null;
+    public SuggestionAdapter(Context context, int resource) {
+        super(context, resource);
     }
 
     @Override
     public Filter getFilter() {
-        return null;
+        return super.getFilter();
+
+
     }
 }
