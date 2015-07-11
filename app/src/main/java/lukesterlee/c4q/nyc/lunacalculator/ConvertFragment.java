@@ -148,7 +148,16 @@ public class ConvertFragment extends Fragment {
 
 
         // TODO: create a new custom adapter.
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, list) {
+            @Override
+            public Filter getFilter() {
+
+                return super.getFilter();
+            }
+
+
+
+        };
         autoCompleteTextView.setAdapter(adapter);
 
 
