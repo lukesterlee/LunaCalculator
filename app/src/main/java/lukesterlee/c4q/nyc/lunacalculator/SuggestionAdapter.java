@@ -8,10 +8,12 @@ import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 
+import java.util.List;
+
 /**
  * Created by Luke on 5/28/2015.
  */
-public class SuggestionAdapter extends BaseAdapter implements Filterable {
+public class SuggestionAdapter<T> extends ArrayAdapter {
 
     // TODO: move this to strings.xml
     final String[] SUGGESTIONS = new String[]{
@@ -56,8 +58,9 @@ public class SuggestionAdapter extends BaseAdapter implements Filterable {
     };
 
 
-
-
+    public SuggestionAdapter(Context context, int resource, int textViewResourceId, List objects) {
+        super(context, resource, textViewResourceId, objects);
+    }
 
     @Override
     public int getCount() {
@@ -95,6 +98,7 @@ public class SuggestionAdapter extends BaseAdapter implements Filterable {
             protected void publishResults(CharSequence constraint, FilterResults results) {
 
             }
-        }
+        };
+        return myFilter;
     }
 }

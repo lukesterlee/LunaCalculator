@@ -8,8 +8,8 @@ android {
         applicationId "lukesterlee.c4q.nyc.lunacalculator"
         minSdkVersion 17
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 0
+        versionName "0.9"
     }
     buildTypes {
         release {

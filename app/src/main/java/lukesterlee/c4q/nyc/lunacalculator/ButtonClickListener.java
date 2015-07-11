@@ -1041,6 +1041,7 @@ public class ButtonClickListener implements View.OnClickListener {
         panelHistory.setText("y = " + print);
         mFragment.graphButtonClicked(formula, min, max);
 
+
         equal.setBackgroundResource(R.drawable.button_green2);
         equal.setText("=");
 
