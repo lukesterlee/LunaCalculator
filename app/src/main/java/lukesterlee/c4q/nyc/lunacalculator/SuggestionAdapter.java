@@ -10,9 +10,7 @@ import android.widget.Filterable;
 
 import java.util.List;
 
-/**
- * Created by Luke on 5/28/2015.
- */
+
 public class SuggestionAdapter<T> extends ArrayAdapter {
 
     // TODO: move this to strings.xml

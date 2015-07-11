@@ -37,6 +37,10 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
     Button buttonPercentage;
     Button equal;
 
+    public static final String PANEL_KEY = "panel";
+    public static final String HISTORY_KEY = "history";
+    public static final String ANSWER_KEY = "answer";
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,9 +51,9 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
         history = (TextView) result.findViewById(R.id.history);
 
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        panel.setText(sharedPref.getString("panel", ""));
-        history.setText(sharedPref.getString("history", ""));
-        ans = sharedPref.getString("ans", "");
+        panel.setText(sharedPref.getString(PANEL_KEY, ""));
+        history.setText(sharedPref.getString(HISTORY_KEY, ""));
+        ans = sharedPref.getString(ANSWER_KEY, "");
 
 
         sin = (Button) result.findViewById(R.id.buttonSin);
@@ -147,9 +151,9 @@ public class CalculatorFragment extends Fragment implements GraphCallbacks{
 
         SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("panel", panel.getText().toString());
-        editor.putString("history", history.getText().toString());
-        editor.putString("ans", ans);
+        editor.putString(PANEL_KEY, panel.getText().toString());
+        editor.putString(HISTORY_KEY, history.getText().toString());
+        editor.putString(ANSWER_KEY, ans);
         editor.commit();
     }
 }
