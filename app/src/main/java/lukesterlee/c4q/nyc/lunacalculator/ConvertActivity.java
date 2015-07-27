@@ -6,11 +6,8 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -22,12 +19,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Created by Luke on 5/21/2015.
+ * Created by Willee on 6/20/15.
  */
 
 // TODO: add currency feature.
 // TODO: change this to activity.
-public class ConvertFragment extends Fragment {
+public class ConvertActivity extends Activity{
 
 
     // TODO: move this to strings.xml
@@ -123,39 +120,19 @@ public class ConvertFragment extends Fragment {
     String search = "";
     String answer;
 
-    public ConvertFragment() {
-        super();
-    }
-
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View result = inflater.inflate(R.layout.activity_converter, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_converter);
 
-
-
-
-
-        autoCompleteTextView = (AutoCompleteTextView) result.findViewById(R.id.autocomplete_units);
-        answerPanel = (TextView) result.findViewById(R.id.textView_answer);
-        submit = (Button) result.findViewById(R.id.button_submit);
-        send = (Button) result.findViewById(R.id.button_send);
+        initializeViews();
 
         ArrayList<String> list = new ArrayList<String>(Arrays.asList(SUGGESTIONS));
 
 
         // TODO: create a new custom adapter.
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, list) {
-            @Override
-            public Filter getFilter() {
-
-                return super.getFilter();
-            }
-
-
-
-        };
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(ConvertActivity.this, android.R.layout.simple_dropdown_item_1line, list);
         autoCompleteTextView.setAdapter(adapter);
 
 
@@ -189,7 +166,7 @@ public class ConvertFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences = ConvertActivity.this.getPreferences(Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("panel", answerPanel.getText().toString());
                 editor.putString("history", answerPanel.getText().toString());
@@ -208,15 +185,15 @@ public class ConvertFragment extends Fragment {
             }
         });
 
-
-        return result;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
+    private void initializeViews() {
 
+        autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.autocomplete_units);
+        answerPanel = (TextView) findViewById(R.id.textView_answer);
+        submit = (Button) findViewById(R.id.button_submit);
+        send = (Button) findViewById(R.id.button_send);
+    }
 
     public String getAnswer() {
 
@@ -267,11 +244,5 @@ public class ConvertFragment extends Fragment {
     }
     public static String[] getSearchArray(String input) {
         return input.split(" ");
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        ((MainActivity) activity).onSectionAttached(getArguments().getInt("position"));
     }
 }

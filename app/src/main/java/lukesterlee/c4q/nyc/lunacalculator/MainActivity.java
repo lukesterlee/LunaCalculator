@@ -2,6 +2,7 @@ package lukesterlee.c4q.nyc.lunacalculator;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -59,10 +60,9 @@ public class MainActivity extends ActionBarActivity
                 fragment.setArguments(args);
                 break;
             case 1 :
-                fragment = new ConvertFragment();
-                args = new Bundle();
-                args.putInt("position", 1);
-                fragment.setArguments(args);
+                Intent intentToConvert = new Intent(MainActivity.this, ConvertActivity.class);
+                intentToConvert.putExtra("position", 1);
+                startActivity(intentToConvert);
                 break;
             case 2 :
 
